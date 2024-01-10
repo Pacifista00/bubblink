@@ -1,0 +1,36 @@
+body{
+    min-height: 100vh !important;
+    background-image: linear-gradient(to top, #52057B, #222831, #222831, #222831);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.card-home{
+    border-radius: 0;
+}
+.container-login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.fa-solid {
+    width: 20px;
+}
+.my-input{
+    border-bottom: 1px solid gray;
+}
+.my-btn{
+    border: none;
+    background-image: linear-gradient(to left, #52057B, #32E0C4);
+    width: 100%;
+}
+.my-form-control{
+    border: none;
+    outline: none;
+}
+
+
+
+.text-link{
+    text-decoration: none;
+    color: #52057B;
+}

@@ -1,37 +1,66 @@
 <template>
-    <Router-link to="/">Home</Router-link>
-    <Router-link to="/account">Account</Router-link>
-    <!-- <div class="container">
-    <div class="row mt-5">
-      <div class="col-md-3">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Bubblink</h5>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">An item</li>
-              <li class="list-group-item">A second item</li>
-              <li class="list-group-item">A third item</li>
-            </ul>
-          </div>
+    <div class="container">
+    <div class="row mt-3">
+        <h1 class="text-light ">Posts</h1>
+        <!-- sidebar -->
+        <div class="col-md-3">
+            <div>
+                <div class="card">
+                <div class="card-body">
+                    <div class="title d-flex align-items-center mb-3">
+                        <img src="../../public/img/logo.png" alt="" class="img-fluid" style="width: 25px;">
+                        <h3 class="ms-2 fs-3 card-title mb-0">Bubblink</h3>
+                    </div>
+                    <img src="../../public/img/profile.jpg" class="card-img-top" alt="...">
+                    <h4 class="text-center">Pacifista</h4>
+                    
+                    <ul class="list-unstyled">
+                        <li class="list-item">
+                            <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/home">Home</Router-link>
+                        </li>
+                        <li class="list-item">
+                            <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/account">Account</Router-link>
+                        </li>
+                        <li class="list-item">
+                            <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/logout">Create Post</Router-link>
+                        </li>
+                    </ul>
+                    <a href="#" class="btn my-btn">Logout</a>
+                </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-md-9">
-        <div class="search mb-3">
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
+
+        <!-- posts -->
+        <div class="col-md-9">
+            <form class="d-flex mb-3" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn my-btn2" type="submit">Search</button>
+            </form>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="../../public/img/vbg.jpg" alt="" class="profile-picture">
+                        <h3 class="ms-2 fs-5 card-title mb-0">Bubblink</h3>
+                    </div>
+                    <div class="container">
+                        <div class="mb-3">
+                            <img class="post-image" src="../../public/img/vbg.jpg" alt="post-image">
+                        </div>
+                        <div class="interact d-flex">
+                            <div class="like">
+                                <i class="fa-regular fa-heart me-3"><span class="ms-1">0</span></i>
+                            </div>
+                            <div class="comment">
+                                <i class="fa-regular fa-comment me-3"><span class="ms-1">0</span></i>
+                            </div>
+                        </div>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <h6 class="card-subtitle mb-2 text-body-secondary border-top border-secondary pt-2">26-Feb-2023</h6>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
-        </div>
-      </div>
     </div>
-  </div> -->
+  </div>
 </template>

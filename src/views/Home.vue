@@ -42,6 +42,17 @@
                     <div class="d-flex align-items-center mb-3">
                         <img src="../../public/img/vbg.jpg" alt="" class="profile-picture">
                         <h3 class="ms-2 fs-5 card-title mb-0">Bubblink</h3>
+                        <div class="ms-auto">
+                            <div class="dropdown">
+                                <button class="btn btn-link text-dark dropdown-toggle" type="button" id="optionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="optionsMenu">
+                                    <li><a class="dropdown-item" href="#">Edit</a></li>
+                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="container">
                         <div class="mb-3">

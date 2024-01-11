@@ -9,6 +9,9 @@ body{
 .card, .modal-content{
     background-color: #EEEEEE;
 }
+.btn-link.dropdown-toggle::after {
+    display: none;
+}
 .modal-content{
     border-radius: 0 !important;
 }

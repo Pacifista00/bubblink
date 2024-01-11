@@ -3,7 +3,7 @@
     <div class="row mt-3">
         <h1 class="text-light ">Profile</h1>
         <!-- sidebar -->
-        <div class="col-md-3">
+        <div class="col-md-3 my-sidebar">
             <div>
                 <div class="card">
                 <div class="card-body">
@@ -39,7 +39,7 @@
                     <img src="../../public/img/profile.jpg" class="profile-picture-large img-thumbnail mb-3" alt="..." style="width:300px;">
                     <div class="row">
                         <div class="col-md-6 border-end">
-                            <div class="text-end mx-auto">
+                            <div class="detail-profile text-end mx-auto">
                                 <h3 class="mb-0">Pacifista</h3>
                                 <p class="my-0">
                                     pacifista@gmail.com
@@ -52,7 +52,7 @@
                         <div class="col-md-6">
                             <div class="bio text-start">
                                 <h4>Bio :</h4>
-                                <p class="fs-5 text-secondary border rounded p-2">asdbiasdjasdjnasdbasjdbjasdjasddojasdbojjasdkijasdj asjdajs daj djasd kiasd a sdka sdjk askjdjk askdd asd aijsdboajusdbiuabd asidbasd asdiuabd asadiabdu</p>
+                                <p class="fs-6 text-secondary border rounded p-2">asdbiasdjasdjnasdbasjdbjasdjasddojasdbojjasdkijasdj asjdajs daj djasd kiasd a sdka sdjk askjdjk askdd asd aijsdboajusdbiuabd asidbasd asdiuabd asadiabdu</p>
                             </div>
                         </div>
                         <form action="">
@@ -63,8 +63,22 @@
             </div>
         </div>
 
+        <!-- sidebar phone -->
+        <div class="phone-navbar">
+            <div class="d-flex justify-content-evenly p-3">
+                <i class="fa-regular fa-user fs-3"></i>
+                |
+                <i class="fa-solid fa-square-plus fs-3"></i>
+                |
+                <i class="fa-solid fa-house-chimney-user fs-3"></i>
+                |
+                <i class="fa-solid fa-right-from-bracket fs-3"></i>
+            </div>
+        </div>
+
         <!-- posts -->
         <div class="col-md-9 offset-md-3">
+            <h1 class="text-light">Posts</h1>
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
@@ -82,7 +96,7 @@
                                 </ul>
                             </div>
                         </div>
-                        
+
                     </div>
                     <div class="container">
                         <div class="mb-3">

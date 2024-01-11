@@ -82,10 +82,33 @@ body{
     border: none;
     outline: none;
 }
-
-
-
 .text-link{
     text-decoration: none;
     color: #52057B;
+}
+.phone-navbar{
+    display: none;
+}
+
+
+
+@media (max-width: 768px) {
+    .my-sidebar{
+        display: none;
+    }
+    .phone-navbar{
+        color: #EEEEEE;
+        display: block;
+        position: fixed;
+        background-color: black;
+        border-top: 2px solid #892CDC;
+        bottom: 0;
+        width: 100%;
+        z-index: 10;
+        opacity: 0.9;
+    }
+    .detail-profile{
+        text-align: center !important;
+    }
+
 }

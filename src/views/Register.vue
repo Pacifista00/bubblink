@@ -5,7 +5,7 @@
                 <h3 class="text-center mb-3">Register</h3>
                 <div class="mb-3">
                     <div class="my-input mb-3">
-                        <input type="text" class="my-form-control bg-transparent" id="fullname" name="fullname" placeholder="fullname">
+                        <input type="email" class="my-form-control bg-transparent" id="email" name="email" placeholder="email">
                     </div>
                     <div class="my-input mb-3">
                         <input type="text" class="my-form-control bg-transparent" id="username" name="username" placeholder="username">

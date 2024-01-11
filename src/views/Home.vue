@@ -1,9 +1,9 @@
 <template>
     <div class="container">
-    <div class="row mt-3">
-        <h1 class="text-light ">Posts</h1>
-        <!-- sidebar -->
-        <div class="col-md-3">
+    <div class="row mt-5">
+        <!-- sidebar desktop -->
+        <div class="col-md-3 my-sidebar">
+            <h1 class="text-light ">Posts</h1>
             <div>
                 <div class="card">
                 <div class="card-body">
@@ -28,6 +28,19 @@
                     <a href="#" class="btn my-btn">Logout</a>
                 </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- sidebar phone -->
+        <div class="phone-navbar">
+            <div class="d-flex justify-content-evenly p-3">
+                <i class="fa-regular fa-user fs-3"></i>
+                |
+                <i class="fa-solid fa-square-plus fs-3"></i>
+                |
+                <i class="fa-solid fa-house-chimney-user fs-3"></i>
+                |
+                <i class="fa-solid fa-right-from-bracket fs-3"></i>
             </div>
         </div>
 

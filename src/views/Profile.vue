@@ -22,7 +22,7 @@
                             <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/account">Account</Router-link>
                         </li>
                         <li class="list-item">
-                            <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/logout">Create Post</Router-link>
+                            <div type="button" class="text-link p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">Create Post</div>
                         </li>
                     </ul>
                     <a href="#" class="btn my-btn">Logout</a>
@@ -119,7 +119,7 @@
     </div>
 </div>
 
- <!-- modal -->
+ <!-- modal edit profile -->
 <div class="modal modal-lg fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -144,6 +144,32 @@
             <div class="mb-2">
                 <label for="bio" class="col-form-label">Bio:</label>
                 <textarea class="form-control" id="bio"></textarea>
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn my-btn3">Save</button>
+        </div>
+        </div>
+    </div>
+</div>
+ <!-- modal post -->
+<div class="modal modal-lg fade" id="modalpost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Add Post</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+            <div class="mb-2">
+                <label for="image" class="col-form-label">Add image</label><br>
+                <input type="file" id="image">
+            </div>
+            <div class="mb-2">
+                <label for="username" class="col-form-label">Content:</label>
+                <textarea class="form-control" id="username"></textarea>
             </div>
             </form>
         </div>

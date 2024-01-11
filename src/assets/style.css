@@ -9,10 +9,6 @@ body{
 .card{
     background-color: #EEEEEE;
 }
-.sticky-element{
-    position: -webkit-sticky; /* Safari */
-        position: sticky;
-}
 .container-login{
     display: flex;
     align-items: center;
@@ -27,6 +23,9 @@ body{
     width: 25px;
     height: 25px;
     object-fit: cover;
+}
+.profile-picture-large{
+    border-radius: 50%;
 }
 .post-image{
     width: 100%;
@@ -48,6 +47,20 @@ body{
     border: 2px solid #892CDC;
     color: #FFFFFF;
     transition: .5s;
+}
+.my-btn3{
+    border: none;
+    background-image: linear-gradient(to left, #52057B, #32E0C4);
+    color: #FFFFFF;
+}
+.my-btn:hover, .my-btn3:hover{
+    color: #FFFFFF;
+    box-shadow: 0 0 5px #892CDC;
+    scale: 1.03;
+}
+.my-btn:active, .my-btn3:active{
+    color: #FFFFFF !important;
+    scale: 0.95;
 }
 .my-btn2:hover{
     border: none;

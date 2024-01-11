@@ -61,12 +61,11 @@ body{
 }
 .my-btn:hover, .my-btn3:hover{
     color: #FFFFFF;
-    box-shadow: 0 0 5px #892CDC;
-    scale: 1.03;
+    box-shadow: 0 0 7px #892CDC;
 }
 .my-btn:active, .my-btn3:active{
     color: #FFFFFF !important;
-    scale: 0.95;
+    background-image: linear-gradient(to left, #892CDC, #892CDC);
 }
 .my-btn2:hover{
     border: none;

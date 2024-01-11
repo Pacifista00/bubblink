@@ -111,7 +111,8 @@
                             </div>
                         </div>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <h6 class="card-subtitle mb-2 text-body-secondary border-top border-secondary pt-2">26-Feb-2023</h6>
+                        <h6 class="mb-2 text-body-secondary">26-Feb-2023</h6>
+                        <button type="button" class="btn my-btn p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#postdetail">Detail</button>
                     </div>
                 </div>
             </div>
@@ -175,6 +176,80 @@
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn my-btn3">Save</button>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- modal detail post -->
+<div class="modal modal-lg fade" id="postdetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Detail</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="d-flex align-items-center mb-3">
+                <img src="../../public/img/vbg.jpg" alt="" class="profile-picture">
+                <h3 class="ms-2 fs-5 card-title mb-0">Bubblink</h3>
+                <div class="ms-auto">
+                    <div class="dropdown">
+                        <button class="btn btn-link text-dark dropdown-toggle" type="button" id="optionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="optionsMenu">
+                            <li><a class="dropdown-item" href="#">Edit</a></li>
+                            <li><a class="dropdown-item" href="#">Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="mb-3">
+                    <img class="post-image" src="../../public/img/vbg.jpg" alt="post-image">
+                </div>
+                <div class="interact d-flex">
+                    <div class="like">
+                        <i class="fa-regular fa-heart me-3"><span class="ms-1">0</span></i>
+                    </div>
+                    <div class="comment">
+                        <i class="fa-regular fa-comment me-3"><span class="ms-1">0</span></i>
+                    </div>
+                </div>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <h6 class="card-subtitle mb-2 text-body-secondary border-top border-secondary pt-2">26-Feb-2023</h6>
+            </div>
+
+            <div class="comment p-3">
+                <h2>Comments</h2>
+                <ul class="list-group list-group-flush pt-3">
+                    <li class="list-group-item border-0 pt-3">
+                        <div class="commentator d-flex">
+                            <img src="../../public/img/vbg.jpg" alt="" class="profile-picture">
+                            <h3 class="ms-2 fs-5 card-title mb-0">Bubblink</h3>
+                        </div>
+                        <p class="m-2">Halo ngab</p>
+                    </li>
+                    <li class="list-group-item border-0">
+                        <div class="commentator d-flex">
+                            <img src="../../public/img/vbg.jpg" alt="" class="profile-picture">
+                            <h3 class="ms-2 fs-5 card-title mb-0">Bubblink</h3>
+                        </div>
+                        <p class="m-2">Halo ngab</p>
+                    </li>
+                    <li class="list-group-item border-0">
+                        <div class="commentator d-flex">
+                            <img src="../../public/img/vbg.jpg" alt="" class="profile-picture">
+                            <h3 class="ms-2 fs-5 card-title mb-0">Bubblink</h3>
+                        </div>
+                        <p class="m-2">Halo ngab</p>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn my-btn3">Back</button>
         </div>
         </div>
     </div>

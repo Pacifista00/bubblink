@@ -25,7 +25,9 @@
                             <div type="button" class="text-link p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">Create Post</div>
                         </li>
                     </ul>
-                    <a href="#" class="btn my-btn">Logout</a>
+                    <form @submit.prevent="logout">
+                        <button type="submit" class="btn my-btn">Logout</button>
+                    </form>
                 </div>
                 </div>
             </div>
@@ -34,13 +36,17 @@
         <!-- sidebar phone -->
         <div class="phone-navbar">
             <div class="d-flex justify-content-evenly p-3">
-                <i class="fa-regular fa-user fs-3"></i>
+                <button type="submit" class="btn phone-navbar-btn bg-transparent text-light"><i class="fa-regular fa-user fs-3"></i></button>
                 |
-                <i class="fa-solid fa-square-plus fs-3"></i>
+                <button type="submit" class="btn phone-navbar-btn bg-transparent text-light"><i class="fa-solid fa-square-plus fs-3"></i></button>
                 |
-                <i class="fa-solid fa-house-chimney-user fs-3"></i>
+                <form @submit.prevent="logout">
+                    <button type="submit" class="btn phone-navbar-btn bg-transparent text-light"><i class="fa-solid fa-house-chimney-user fs-3"></i></button>
+                </form>
                 |
-                <i class="fa-solid fa-right-from-bracket fs-3"></i>
+                <form @submit.prevent="logout">
+                    <button type="submit" class="btn phone-navbar-btn bg-transparent text-light"><i class="fa-solid fa-right-from-bracket fs-3 border-none" pointer></i></button>
+                </form>
             </div>
         </div>
 
@@ -191,3 +197,28 @@
     </div>
 </div>
 </template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  methods : {
+    async logout(){
+        try{
+            const token = await localStorage.getItem('token');
+            await axios.post("http://127.0.0.1:8000/api/logout", {},{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            localStorage.removeItem('token');
+
+            this.$router.push('/');
+    
+        }catch(err){
+            console.error('Logout failed:', err);
+        }
+    }
+  }
+}
+</script>

@@ -17,10 +17,12 @@ const routes = [
     {
         path: '/home', 
         component: Home,
+        meta: { requiresAuth: true } 
     },
     {
         path: '/profile',
-        component: Profile, 
+        component: Profile,
+        meta: { requiresAuth: true } 
     },
 ]
 
@@ -28,5 +30,15 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 })
+
+router.beforeEach((to, from, next) => {
+    const isAuthenticated = !!localStorage.getItem('token');
+    
+    if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+      next('/');
+    } else {
+      next();
+    }
+});
 
 export default router;

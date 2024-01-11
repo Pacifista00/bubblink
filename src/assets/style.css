@@ -89,6 +89,10 @@ body{
     display: none;
 }
 
+.phone-navbar-btn:active{
+    border: 0 !important;
+}
+
 
 
 @media (max-width: 768px) {

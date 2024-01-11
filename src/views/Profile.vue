@@ -56,7 +56,7 @@
                             </div>
                         </div>
                         <form action="">
-                            <button type="submit" class="btn my-btn3 px-5">Edit</button>
+                            <button type="button" class="btn my-btn3 px-5" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
                         </form>
                     </div>
                     
@@ -92,4 +92,39 @@
         </div>
     </div>
   </div>
+
+  <!-- modal -->
+  <div class="modal modal-lg fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Profile</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                <div class="mb-2">
+                    <label for="image" class="col-form-label">Change profile picture</label><br>
+                    <input type="file" id="image">
+                </div>
+                <div class="mb-2">
+                    <label for="username" class="col-form-label">Username:</label>
+                    <input type="text" class="form-control" id="username">
+                </div>
+                <div class="mb-2">
+                    <label for="email" class="col-form-label">Email:</label>
+                    <input type="email" class="form-control" id="email">
+                </div>
+                <div class="mb-2">
+                    <label for="bio" class="col-form-label">Bio:</label>
+                    <textarea class="form-control" id="bio"></textarea>
+                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn my-btn3">Save</button>
+            </div>
+            </div>
+        </div>
+    </div>
 </template>

@@ -6,8 +6,11 @@ body{
 }
 
 
-.card{
+.card, .modal-content{
     background-color: #EEEEEE;
+}
+.modal-content{
+    border-radius: 0 !important;
 }
 .container-login{
     display: flex;

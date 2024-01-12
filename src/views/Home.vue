@@ -236,7 +236,7 @@ export default {
         .then(response => (
             this.userUsername = response.data.data.username,
             this.userRole = response.data.data.role,
-            this.showModal('Welcome', `have a nice day ${this.userUsername}`)
+            this.showModal('Welcome', `Have a nice day ${this.userUsername}`)
             ))
         .catch(error => {
             localStorage.removeItem('token'),

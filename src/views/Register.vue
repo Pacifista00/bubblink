@@ -17,7 +17,9 @@
                         <input v-model="password_confirm" type="password" class="my-form-control bg-transparent" id="passwordconfirm" name="passwordconfirm" placeholder="confirm password">
                     </div>
                 </div>
-                <button type="submit" class="btn my-btn text-light my-2">REGISTER</button>
+                <button type="submit" class="btn my-btn text-light my-2">
+                    {{ loading ? 'Please wait...' : 'Register' }}
+                </button>
                 <p>Already have an account? <RouterLink to="/" class="text-link">Login</RouterLink></p>
             </form>
         </div>
@@ -27,18 +29,20 @@
     <div class="modal" id="showModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header my-modal">
                 <h5 class="modal-title">{{ headerMessage }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>{{ errorMessage }}.</p>
+                <p>{{ message }}.</p>
             </div>
             </div>
         </div>
     </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default{
     data(){
         return {
@@ -47,13 +51,11 @@ export default{
             password:'',
             password_confirm:'',
             headerMessage:'',
-            errorMessage: '',
+            message: '',
+            loading: false,
         }
     },
     mounted(){
-        if (localStorage.getItem('token')) {
-            this.$router.push({ path: '/home', query: { alertMessage : 'You already logged in!' } });
-        }
         if (this.$route.query.alertMessage){
             this.showModal('Error', this.$route.query.alertMessage);
         }
@@ -61,22 +63,33 @@ export default{
     methods : {
         showModal(header, message) {
             this.headerMessage = header;
-            this.errorMessage = message;
+            this.message = message;
             $('#showModal').modal('show');
         },
         async register(){
             try{
-                await axios.post("http://127.0.0.1:8000/api/register", {
+                this.loading = true;
+                const response = await axios.post("http://127.0.0.1:8000/api/register", {
                     username : this.username,
                     email : this.email,
                     password : this.password,
                     password_confirm : this.password_confirm,
                 })
-
-                this.$router.push('/');
+                if(response.data.message == "Register success!"){
+                    this.$router.push('/');
+                }else{
+                    this.message=response.data.message;
+                    throw err;
+                }
         
             }catch(err){
-                this.showModal('Error','Register failed. Please try again.');
+                if(this.message==''){
+                    this.showModal('Error','Register failed. Please try again!');
+                }else{
+                    this.showModal('Error',this.message);
+                }
+            }finally {
+                this.loading = false;
             }
         }
     }

@@ -16,7 +16,9 @@
                         <input v-model="password" type="password" class="my-form-control bg-transparent" id="password" name="password" placeholder="password">
                     </div>
                 </div>
-                <button type="submit" class="btn my-btn text-light my-2">LOGIN</button>
+                <button type="submit" class="btn my-btn text-light my-2">
+                    {{ loading ? 'Please wait...' : 'Login' }}
+                </button>
                 <p>Don't have an account? <RouterLink to="/register" class="text-link">Register</RouterLink></p>
             </form>
         </div>
@@ -49,12 +51,10 @@ export default {
       password:'',
       headerMessage:'',
       message: '',
+      loading: false,
     }
   },
   mounted(){
-    if (localStorage.getItem('token')) {
-        this.$router.push({ path: '/home', query: { alertMessage : 'You already logged in!' } });
-    }
     if (this.$route.query.alertMessage){
         this.showModal('Error', this.$route.query.alertMessage);
     }
@@ -67,6 +67,7 @@ export default {
     },
     async login(){
         try{
+            this.loading = true; 
             const response = await axios.post("http://127.0.0.1:8000/api/login", {
                 email : this.email,
                 password : this.password,
@@ -85,6 +86,8 @@ export default {
     
         }catch(err){
             this.showModal('Error','Login failed. Please try again.');
+        }finally {
+            this.loading = false;
         }
     }
   }

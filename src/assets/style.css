@@ -81,6 +81,10 @@ body{
     border: none;
     outline: none;
 }
+.my-modal{
+    border-top :4px solid #892CDC;
+    border-radius: 0;
+}
 .text-link{
     text-decoration: none;
     color: #52057B;

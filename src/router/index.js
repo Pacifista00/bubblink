@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
     const isAuthenticated = !!localStorage.getItem('token');
     
     if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
-      next('/');
+      next({ path: '/', query: { alertMessage: 'You are unauthenticated. Please login first!' } });
     } else {
       next();
     }

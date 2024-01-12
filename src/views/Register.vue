@@ -39,8 +39,6 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
-
 export default{
     data(){
         return {
@@ -54,7 +52,10 @@ export default{
     },
     mounted(){
         if (localStorage.getItem('token')) {
-            this.$router.push('/home');
+            this.$router.push({ path: '/home', query: { alertMessage : 'You already logged in!' } });
+        }
+        if (this.$route.query.alertMessage){
+            this.showModal('Error', this.$route.query.alertMessage);
         }
     },
     methods : {

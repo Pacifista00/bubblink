@@ -255,3 +255,33 @@
     </div>
 </div>
 </template>
+<script>
+export default {
+    data(){
+        return {
+            headerMessage : '',
+            message : '',
+            userUsername: '',
+            userRole: ''
+        }
+    },
+    mounted() {
+        const token = localStorage.getItem('token');
+        
+        axios.get('http://127.0.0.1:8000/api/loggeduser',{
+            headers: {
+                Authorization : `Bearer ${token}as`
+            }
+        })
+        .then(response => (
+            this.userUsername = response.data.data.username,
+            this.userRole = response.data.data.role,
+            this.showModal('Welcome', `have a nice day ${this.userUsername}`)
+            ))
+        .catch(error => {
+            localStorage.removeItem('token'),
+            this.$router.push({ path: '/', query: { alertMessage : 'Your session has ended!' } });
+        })
+        }
+}
+</script>

@@ -23,16 +23,16 @@
     </div>
 
 
-    <!-- Error Modal -->
+    <!-- Modal message -->
     <div class="modal" id="showModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">{{ headerMessage }}</h5>
+            <div class="modal-header my-modal">
+                <h5 class="modal-title fw-bolder">{{ headerMessage }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>{{ errorMessage }}.</p>
+                <p class="fs-6">{{ message }}.</p>
             </div>
             </div>
         </div>
@@ -48,18 +48,21 @@ export default {
       email: '',
       password:'',
       headerMessage:'',
-      errorMessage: '',
+      message: '',
     }
   },
   mounted(){
     if (localStorage.getItem('token')) {
-      this.$router.push('/home');
+        this.$router.push({ path: '/home', query: { alertMessage : 'You already logged in!' } });
+    }
+    if (this.$route.query.alertMessage){
+        this.showModal('Error', this.$route.query.alertMessage);
     }
   },
   methods : {
     showModal(header, message) {
         this.headerMessage = header;
-        this.errorMessage = message;
+        this.message = message;
         $('#showModal').modal('show');
     },
     async login(){

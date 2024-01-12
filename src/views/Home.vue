@@ -12,7 +12,7 @@
                         <h3 class="ms-2 fs-3 card-title mb-0">Bubblink</h3>
                     </div>
                     <img src="../../public/img/profile.jpg" class="card-img-top" alt="...">
-                    <h4 class="text-center">Pacifista</h4>
+                    <h4 class="text-center">{{ userUsername }}</h4>
                     
                     <ul class="list-unstyled">
                         <li class="list-item">
@@ -196,29 +196,76 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Message -->
+<div class="modal" id="showModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header my-modal">
+                <h5 class="modal-title fw-bolder">{{ headerMessage }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="fs-6">{{ message }}.</p>
+            </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 import axios from 'axios';
 
 export default {
-  methods : {
-    async logout(){
-        try{
-            const token = await localStorage.getItem('token');
-            await axios.post("http://127.0.0.1:8000/api/logout", {},{
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            localStorage.removeItem('token');
+    data(){
+        return {
+            headerMessage : '',
+            message : '',
+            userUsername: '',
+            userRole: ''
+        }
+    },
+    mounted(){        
+        const token = localStorage.getItem('token');
+        
+        axios.get('http://127.0.0.1:8000/api/loggeduser',{
+            headers: {
+                Authorization : `Bearer ${token}`
+            }
+        })
+        .then(response => (
+            this.userUsername = response.data.data.username,
+            this.userRole = response.data.data.role,
+            this.showModal('Welcome', `have a nice day ${this.userUsername}`)
+            ))
+        .catch(error => {
+            localStorage.removeItem('token'),
+            this.$router.push({ path: '/', query: { alertMessage : 'Your session has ended!' } });
+        })
+    },
+    methods : {
+        showModal(header, message) {
+            this.headerMessage = header;
+            this.message = message;
+            $('#showModal').modal('show');
+        },
+        async logout(){
+            try{
+                const token = localStorage.getItem('token');
+                await axios.post("http://127.0.0.1:8000/api/logout", {},{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
 
-            this.$router.push('/');
-    
-        }catch(err){
-            console.error('Logout failed:', err);
+                localStorage.removeItem('token');
+
+                this.$router.push('/');
+        
+            }catch(err){
+                console.error('Logout failed:', err);
+            }
         }
     }
-  }
 }
 </script>

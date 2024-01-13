@@ -26,8 +26,8 @@ body{
 }
 .profile-picture{
     border-radius: 50%;
-    width: 25px;
-    height: 25px;
+    width: 40px;
+    height: 40px;
     object-fit: cover;
 }
 .profile-picture-large{
@@ -85,6 +85,10 @@ body{
     border-top :4px solid #892CDC;
     border-radius: 0;
 }
+.my-modal-mini{
+    background-color: #892CDC;
+    border-radius: 0;
+}
 .text-link{
     text-decoration: none;
     color: #52057B;
@@ -100,6 +104,9 @@ body{
 
 
 @media (max-width: 768px) {
+    .post-image{
+        max-height: 270px;
+    }
     .my-sidebar{
         display: none;
     }

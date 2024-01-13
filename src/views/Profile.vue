@@ -19,7 +19,7 @@
                             <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/home">Home</Router-link>
                         </li>
                         <li class="list-item">
-                            <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/account">Account</Router-link>
+                            <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/profile">Profile</Router-link>
                         </li>
                         <li class="list-item">
                             <div type="button" class="text-link p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">Create Post</div>
@@ -256,6 +256,8 @@
 </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
     data(){
         return {
@@ -270,7 +272,7 @@ export default {
         
         axios.get('http://127.0.0.1:8000/api/loggeduser',{
             headers: {
-                Authorization : `Bearer ${token}as`
+                Authorization : `Bearer ${token}`
             }
         })
         .then(response => (

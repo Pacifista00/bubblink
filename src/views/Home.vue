@@ -22,11 +22,13 @@
                             <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/profile">Profile</Router-link>
                         </li>
                         <li class="list-item">
-                            <div type="button" class="text-link p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">Create Post</div>
+                            <div @click="showModalAddPost" type="button" class="text-link p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">Create Post</div>
                         </li>
                     </ul>
                     <form @submit.prevent="logout">
-                        <button type="submit" class="btn my-btn">Logout</button>
+                        <button type="submit" class="btn my-btn">
+                            {{ loading ? 'Please wait...' : 'Logout'}}
+                        </button>
                     </form>
                 </div>
                 </div>
@@ -72,8 +74,10 @@
                                     <i class="fas fa-ellipsis-v"></i>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="optionsMenu">
-                                    <li><a class="dropdown-item" href="#">Edit</a></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li>
+                                        <div @click="showModalEditPost(item.id)" type="button" class="dropdown-item my-dropdown" data-bs-toggle="modal" data-bs-target="#modalpost">Edit</div>
+                                    </li>
+                                    <li><a class="dropdown-item my-dropdown" href="#">Delete</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -104,7 +108,7 @@
 <!-- modal post -->
 <div class="modal modal-lg fade" id="modalpost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form @submit.prevent="addPost">
+        <form @submit.prevent="getSubmitHandler">
         <div class="modal-content">
         <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Add Post</h1>
@@ -234,8 +238,10 @@ export default {
             userImage: '',
             posts:[],
             postImage:null,
+            postId:'',
             content:'',
             loading:false,
+            submitPreventModalName:'',
         }
     },
     mounted(){        
@@ -267,17 +273,51 @@ export default {
             this.posts = response.data.data
             ))
         },
-        methods : {
-            showModal(header, message) {
-                this.headerMessage = header;
-                this.message = message;
-                $('#showModal').modal('show');
-            },
-            imageHandler(event) {
-                this.postImage = event.target.files[0];
-            },
-            async logout(){
-                try{
+    methods : {
+        showModal(header, message) {
+            this.headerMessage = header;
+            this.message = message;
+            $('#showModal').modal('show');
+        },
+        getSubmitHandler() {
+            if (this.submitPreventModalName === 'addPost') {
+                this.addPost();
+            } else if (this.submitPreventModalName === 'editPost') {
+                this.editPost(this.postId);
+            }
+        },
+        imageHandler(event) {
+            this.postImage = event.target.files[0];
+        },
+        showModalAddPost(){
+            this.submitPreventModalName = "addPost"
+        },
+        async showModalEditPost(postId){
+            try{
+                this.submitPreventModalName = "editPost"
+                this.loading = true;
+                this.postId = postId;
+                
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`http://127.0.0.1:8000/api/post/${postId}`,{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                this.postId = response.data.data.id;
+                this.content = response.data.data.content;
+                this.postImage = response.data.data.image;
+        
+            }catch(err){
+                console.error(err);
+            }finally{
+                this.loading = false;
+            }
+        },
+        async logout(){
+            try{
+                this.loading = true;
                 const token = localStorage.getItem('token');
                 await axios.post("http://127.0.0.1:8000/api/logout", {},{
                     headers: {
@@ -291,6 +331,8 @@ export default {
         
             }catch(err){
                 console.error('Logout failed:', err);
+            }finally{
+                this.loading = false;
             }
         },
         async addPost(){
@@ -302,24 +344,52 @@ export default {
                 if(this.postImage){
                     formData.append("image", this.postImage)
                 }
-                console.log(formData)
+
                 const token = localStorage.getItem('token');
-                await axios.post("http://127.0.0.1:8000/api/post", formData,{
+                await axios.post("http://127.0.0.1:8000/api/post", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                         Authorization: `Bearer ${token}`
                     }
                 })
 
-                this.showModal('Alert','Post has been added!');
+                window.location.reload();
                 this.content = ''
+                this.postImage = ''
         
             }catch(err){
                 console.error('Add post failed:', err);
             }finally {
                 this.loading = false;
             }
-        }
+        },
+        async editPost(postId){
+            try{
+                this.loading = true;
+                const formData = new FormData();
+
+                formData.append("content", this.content);
+                if(this.postImage){
+                    formData.append("image", this.postImage);
+                }
+
+                const token = localStorage.getItem('token');
+                await axios.post(`http://127.0.0.1:8000/api/post/${postId}/update`, formData,{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                window.location.reload();
+
+        
+            }catch(err){
+                console.error('Edit post failed:', err);
+            }finally{
+                this.loading = false;
+                this.postId = '';
+            }
+        },
     }
 }
 </script>

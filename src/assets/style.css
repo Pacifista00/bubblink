@@ -89,6 +89,13 @@ body{
     background-color: #892CDC;
     border-radius: 0;
 }
+.my-dropdown:hover{
+    background-color: #892CDC !important;
+    color: #EEEEEE;
+}
+.my-dropdown:active{
+    background-color: #BBBBBB !important;
+}
 .text-link{
     text-decoration: none;
     color: #52057B;

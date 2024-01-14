@@ -43,8 +43,8 @@
         </div>
 
         <!-- posts -->
-        <div class="main">
-            <form class="search-bar d-flex p-3 mb-3 sticky-top" role="search">
+        <div class="main" style="width:470px;">
+            <form class="search-bar d-flex p-3 mb-3 sticky-top" role="search" >
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn my-btn2" type="submit">Search</button>
             </form>
@@ -55,7 +55,7 @@
                             <img :src="item.author_image" alt="" class="profile-picture">
                             <div class="m-0 p-0">
                                 <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ item.author }}</h3>
-                                <p class="ms-2 fs-6 text-body-secondary">{{ item.created_at }}</p>
+                                <p class="ms-2 fs-6 text-gray">{{ item.created_at }}</p>
                             </div>
                         
                         <div class="ms-auto">
@@ -78,7 +78,7 @@
                 </div>
                 <div class="card-body pt-2">
                     <div class="container">
-                        <p class="card-text fs-5 mb-0 pb-1">{{ item.content }}</p>
+                        <p class="card-text fs-6 mb-0 pb-1">{{ item.content }}</p>
                         <div class="interact row mb-2 pt-2">
                             <div class="col-md-6">
                                 <button type="button" class="btn my-btn-like rounded-pill mt-2">

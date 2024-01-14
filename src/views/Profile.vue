@@ -18,7 +18,7 @@
                             <Router-link class="text-light text-decoration-none p-1 fs-5 d-block rounded my-1" to="/profile">PROFILE</Router-link>
                         </li>
                         <li class="list-item">
-                            <div type="button" class="text-light p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">CREATE POST</div>
+                            <div @click="showModalAddPost" type="button" class="text-light p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">CREATE POST</div>
                         </li>
                     </ul>
                 </div>
@@ -43,13 +43,13 @@
         </div>
 
         <!-- main -->
-        <div class="main">
+        <div class="main" style="width:470px;">
             <form class="search-bar d-flex p-3 mb-3 sticky-top" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn my-btn2" type="submit">Search</button>
             </form>
             <div class="d-flex" role="search">
-                <div class="card card-sidebar text-center bg-transparent text-white">
+                <div class="card mx-auto card-sidebar text-center bg-transparent text-white mb-3">
                     <div class="card-body d-flex flex-row">
                         <div class="">
                             <img :src="userImage" class="card-img-top rounded-circle mx-4 my-2" alt="profile" style="width:180px;">
@@ -58,9 +58,9 @@
                         <div class="text-start">
                             <p class="mb-0">Username : <span class="text-gray">{{ userUsername }}</span></p>
                             <p class="mb-0">Role : <span class="text-gray">{{ userRole }}</span></p>
-                            <p class="mb-0">Email : <span class="text-gray">email</span></p>
+                            <p class="mb-0">Email : <span class="text-gray">{{ userEmail }}</span></p>
                             <div class="">Bio : 
-                                <p class="border p-2" style="width:200px;">With supporting text below as a natural lead-in to additional content.</p>
+                                <p class="border p-2" style="width:200px;">{{ userBio }}</p>
                             </div>
                         </div>
 
@@ -72,21 +72,23 @@
                 </div>
             </div>
 
-            <div v-for="item in posts" class="card mb-3">
+            <h1 class="text-light text-center">My Post</h1>
+
+            <div v-for="item in posts" class="card-sidebar card mb-3 bg-transparent text-light">
                 <div class="card-header my-0 py-0">
                     <div class="d-flex align-items-center">
                             <img :src="item.author_image" alt="" class="profile-picture">
                             <div class="m-0 p-0">
                                 <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ item.author }}</h3>
-                                <p class="ms-2 fs-6 text-body-secondary">{{ item.created_at }}</p>
+                                <p class="ms-2 fs-6 text-gray">{{ item.created_at }}</p>
                             </div>
                         
                         <div class="ms-auto">
-                            <div class="dropdown">
+                            <div class="dropdown" >
                                 <button class="btn btn-link text-dark dropdown-toggle" type="button" id="optionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v"></i>
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="optionsMenu">
+                                <ul class="dropdown-menu" aria-labelledby="optionsMenu" >
                                     <li>
                                         <div @click="showModalEditPost(item.id)" type="button" class="dropdown-item my-dropdown" data-bs-toggle="modal" data-bs-target="#modalpost">Edit</div>
                                     </li>
@@ -101,15 +103,15 @@
                 </div>
                 <div class="card-body pt-2">
                     <div class="container">
-                        <p class="card-text fs-5 mb-0 pb-1">{{ item.content }}</p>
+                        <p class="card-text fs-6 mb-0 pb-1">{{ item.content }}</p>
                         <div class="interact row mb-2 pt-2">
                             <div class="col-md-6">
-                                <button type="button" class="btn my-btn-like rounded-pill">
+                                <button type="button" class="btn my-btn-like rounded-pill mt-2">
                                     <i class="fa-regular fa-heart me-3"><span class="ms-1">0</span></i>
                                 </button>
                             </div>
                             <div class="col-md-6">
-                                <button type="button" class="btn my-btn-comment rounded-pill" data-bs-toggle="modal" data-bs-target="#postdetail">
+                                <button type="button" class="btn my-btn-comment rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#postdetail">
                                     <i class="fa-regular fa-comment me-3"><span class="ms-1">{{ item.comment_count }}</span></i>
                                 </button>
                             </div>
@@ -305,6 +307,8 @@ export default {
             message : '',
             userUsername: '',
             userRole: '',
+            userEmail: '',
+            userBio: '',
             userImage: '',
             posts:[],
             postImage:null,
@@ -325,11 +329,140 @@ export default {
         .then(response => (
             this.userUsername = response.data.data.username,
             this.userRole = response.data.data.role,
-            this.userImage = response.data.data.picture
+            this.userImage = response.data.data.picture,
+            this.userEmail = response.data.data.email,
+            this.userBio = response.data.data.bio
             ))
         .catch(error => {
             console.log(error)
         })
+
+        
+        axios.get('http://127.0.0.1:8000/api/mypost',{
+            headers: {
+                Authorization : `Bearer ${token}`
+            }
+        })
+        .then(response => (
+            this.posts = response.data.data
+            ))
+    },methods : {
+        showModal(header, message) {
+            this.headerMessage = header;
+            this.message = message;
+            $('#showModal').modal('show');
+        },
+        getSubmitHandler() {
+            if (this.submitPreventModalName === 'addPost') {
+                this.addPost();
+            } else if (this.submitPreventModalName === 'editPost') {
+                this.editPost(this.postId);
+            }
+        },
+        imageHandler(event) {
+            this.postImage = event.target.files[0];
+        },
+        showModalAddPost(){
+            this.submitPreventModalName = "addPost"
+        },
+        async showModalEditPost(postId){
+            try{
+                this.submitPreventModalName = "editPost"
+                this.loading = true;
+                this.postId = postId;
+                
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`http://127.0.0.1:8000/api/post/${postId}`,{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                this.postId = response.data.data.id;
+                this.content = response.data.data.content;
+                this.postImage = response.data.data.image;
+        
+            }catch(err){
+                console.error(err);
+            }finally{
+                this.loading = false;
+            }
+        },
+        async logout(){
+            try{
+                this.loading = true;
+                const token = localStorage.getItem('token');
+                await axios.post("http://127.0.0.1:8000/api/logout", {},{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                localStorage.removeItem('token');
+
+                this.$router.push('/');
+        
+            }catch(err){
+                console.error('Logout failed:', err);
+            }finally{
+                this.loading = false;
+            }
+        },
+        async addPost(){
+            try{
+                this.loading=true;
+                const formData = new FormData();
+
+                formData.append("content", this.content);
+                if(this.postImage){
+                    formData.append("image", this.postImage)
+                }
+
+                const token = localStorage.getItem('token');
+                await axios.post("http://127.0.0.1:8000/api/post", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                window.location.reload();
+                this.content = ''
+                this.postImage = ''
+        
+            }catch(err){
+                console.error('Add post failed:', err);
+            }finally {
+                this.loading = false;
+            }
+        },
+        async editPost(postId){
+            try{
+                this.loading = true;
+                const formData = new FormData();
+
+                formData.append("content", this.content);
+                if(this.postImage){
+                    formData.append("image", this.postImage);
+                }
+
+                const token = localStorage.getItem('token');
+                await axios.post(`http://127.0.0.1:8000/api/post/${postId}/update`, formData,{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                window.location.reload();
+
+        
+            }catch(err){
+                console.error('Edit post failed:', err);
+            }finally{
+                this.loading = false;
+                this.postId = '';
+            }
+        },
     }
 }
 </script>

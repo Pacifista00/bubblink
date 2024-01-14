@@ -67,7 +67,9 @@
                                     <li>
                                         <div @click="showModalEditPost(item.id)" type="button" class="dropdown-item my-dropdown" data-bs-toggle="modal" data-bs-target="#modalpost">Edit</div>
                                     </li>
-                                    <li><a class="dropdown-item my-dropdown" href="#">Delete</a></li>
+                                    <li>
+                                        <div @click="deletePost(item.id)" type="button" class="dropdown-item my-dropdown">Delete</div>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -79,17 +81,10 @@
                 <div class="card-body pt-2">
                     <div class="container">
                         <p class="card-text fs-6 mb-0 pb-1">{{ item.content }}</p>
-                        <div class="interact row mb-2 pt-2">
-                            <div class="col-md-6">
-                                <button type="button" class="btn my-btn-like rounded-pill mt-2">
-                                    <i class="fa-regular fa-heart me-3"><span class="ms-1">0</span></i>
-                                </button>
-                            </div>
-                            <div class="col-md-6">
-                                <button type="button" class="btn my-btn-comment rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#postdetail">
-                                    <i class="fa-regular fa-comment me-3"><span class="ms-1">{{ item.comment_count }}</span></i>
-                                </button>
-                            </div>
+                        <div class="interact mb-2 pt-2">
+                            <button @click="postDetail(item.id)" type="button" class="btn my-btn-comment rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#postdetail">
+                                <i class="fa-regular fa-comment me-3"><span class="ms-1">{{ item.comment_count }}</span></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -149,48 +144,29 @@
         <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title" id="exampleModalLabel">Detail</h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button @click="closePost" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body mt-1 pt-1">
             <div class="d-flex align-items-center m-0">
-                <img src="" alt="" class="profile-picture ">
+                <img :src="post.author_image" alt="" class="profile-picture ">
                     <div class="">
-                        <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">Hayu</h3>
-                        <p class="ms-2 fs-6 text-body-secondary">y</p>
+                        <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ post.author }}</h3>
+                        <p class="ms-2 fs-6 text-body-secondary">{{ post.created_at }}</p>
                     </div>
-                <div class="ms-auto">
-                    <div class="dropdown">
-                        <button class="btn btn-link text-dark dropdown-toggle" type="button" id="optionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="optionsMenu">
-                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                            <li><a class="dropdown-item" href="#">Delete</a></li>
-                        </ul>
-                    </div>
-                </div>
             </div>
             <div class="container">
-                <div class="mb-3">
-                    <img class="post-image" src="../../public/img/vbg.jpg" alt="post-image">
+                <div v-if="post.image" class="mb-3">
+                    <img class="post-image" :src="post.image" alt="post-image">
                 </div>
-                <div class="interact d-flex">
-                    <div class="like">
-                        <i class="fa-regular fa-heart me-3"><span class="ms-1">0</span></i>
-                    </div>
-                    <div class="comment">
-                        <i class="fa-regular fa-comment me-3"><span class="ms-1">0</span></i>
-                    </div>
-                </div>
-                <p class="card-text mb-2">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <p class="card-text my-2">{{ post.content }}</p>
             </div>
 
             <div class="comment">
-                <h2 class="ps-1 border-top pt-2">Comments</h2>
+                <h2 class="ps-1 border-top pt-2">Comments - {{ post.comment_count }}</h2>
                 <ul class="px-0 mx-0">
                     <li class="list-group-item bg-light px-3 pb-3">
                         <div class="d-flex align-items-center m-0">
-                            <img src="" alt="" class="profile-picture ">
+                            <img src="" alt="" class="profile-picture-comment ">
                                 <div class="">
                                     <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">Hayu</h3>
                                     <p class="ms-2 fs-6 text-body-secondary">y</p>
@@ -247,6 +223,7 @@ export default {
             userUsername: '',
             userRole: '',
             userImage: '',
+            post:[],
             posts:[],
             postImage:null,
             postId:'',
@@ -401,6 +378,40 @@ export default {
                 this.postId = '';
             }
         },
+        async deletePost(postId){
+            try{
+                const token = localStorage.getItem('token');
+                await axios.delete(`http://127.0.0.1:8000/api/post/${postId}/delete`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                window.location.reload();
+
+        
+            }catch(err){
+                console.error('Delete post failed:', err);
+            }
+        },
+        async postDetail(postId){
+            try{
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`http://127.0.0.1:8000/api/post/${postId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                this.post = response.data.data;
+
+        
+            }catch(err){
+                console.error('Query failed:', err);
+            }
+        },closePost(){
+            this.post=[];
+        }
     }
 }
 </script>

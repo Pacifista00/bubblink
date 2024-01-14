@@ -251,9 +251,10 @@
             </div>
 
         </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn my-btn3">Back</button>
-        </div>
+        <form @submit.prevent="addComment(post.id)" class="search-bar d-flex p-3 sticky-top" role="search" >
+            <input v-model="commentText" class="form-control me-2" type="search" placeholder="Add comment!">
+            <button type="" class="btn my-btn2">Send</button>
+        </form>
         </div>
     </div>
 </div>
@@ -291,6 +292,7 @@ export default {
             postImage:null,
             postId:'',
             content:'',
+            comentText:'',
             loading:false,
             submitPreventModalName:'',
         }
@@ -474,7 +476,29 @@ export default {
             }
         },closePost(){
             this.post=[];
-        }
+        },
+        async addComment(postId){
+            try{
+                this.loading=true;
+
+                const token = localStorage.getItem('token');
+                await axios.post(`http://127.0.0.1:8000/api/comment/${postId}`, {
+                    content: this.commentText
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                this.commentText = ''
+                window.location.reload();
+        
+            }catch(err){
+                console.error('Add coment failed:', err);
+            }finally {
+                this.loading = false;
+            }
+        },
         
     }
 }

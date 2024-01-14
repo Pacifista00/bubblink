@@ -164,7 +164,7 @@
             <div class="comment">
                 <h2 class="ps-1 border-top pt-2">Comments - {{ post.comment_count }}</h2>
                 <ul class="px-0 mx-0">
-                    <li class="list-group-item bg-light px-3 pb-3">
+                    <li class="list-group-item bg-light px-3 pb-1">
                         <div class="d-flex align-items-center m-0">
                             <img src="" alt="" class="profile-picture-comment ">
                                 <div class="">
@@ -183,15 +183,16 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="m-2">Halo ngab</p>
+                        <p class="ms-1">Halo ngab</p>
                     </li>
                 </ul>
             </div>
 
         </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn my-btn3">Back</button>
-        </div>
+            <form @submit.prevent="addComment(post.id)" class="search-bar d-flex p-3 sticky-top" role="search" >
+                <input v-model="commentText" class="form-control me-2" type="search" placeholder="Add comment!">
+                <button type="" class="btn my-btn2">Send</button>
+            </form>
         </div>
     </div>
 </div>
@@ -228,6 +229,7 @@ export default {
             postImage:null,
             postId:'',
             content:'',
+            commentText:'',
             loading:false,
             submitPreventModalName:'',
         }
@@ -411,7 +413,29 @@ export default {
             }
         },closePost(){
             this.post=[];
-        }
+        },
+        async addComment(postId){
+            try{
+                this.loading=true;
+
+                const token = localStorage.getItem('token');
+                await axios.post(`http://127.0.0.1:8000/api/comment/${postId}`, {
+                    content: this.commentText
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                this.commentText = ''
+                window.location.reload();
+        
+            }catch(err){
+                console.error('Add coment failed:', err);
+            }finally {
+                this.loading = false;
+            }
+        },
     }
 }
 </script>

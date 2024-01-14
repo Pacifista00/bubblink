@@ -4,22 +4,21 @@
         <!-- sidebar desktop -->
         
         <div class="aside sidebar my-sidebar">
-            <h1 class="text-light">Posts</h1>
-            <div class="card sticky-top">
+            <div class="card sidebar-card sticky-top bg-transparent">
                 <div class="card-body">
                     <div class="title d-flex align-items-center mb-3">
                         <img src="../../public/img/logo.png" alt="" class="img-fluid" style="width: 25px;">
-                        <h3 class="ms-2 fs-3 card-title mb-0 me-4">Bubblink</h3>
+                        <h3 class="ms-2 fs-3 card-title mb-0 me-4 text-light">Bubblink</h3>
                     </div>                    
                     <ul class="list-unstyled">
                         <li class="list-item">
-                            <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/home">Home</Router-link>
+                            <Router-link class="text-light text-decoration-none p-1 fs-5 d-block rounded my-1" to="/home">HOME</Router-link>
                         </li>
                         <li class="list-item">
-                            <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/profile">Profile</Router-link>
+                            <Router-link class="text-light text-decoration-none p-1 fs-5 d-block rounded my-1" to="/profile">PROFILE</Router-link>
                         </li>
                         <li class="list-item">
-                            <div @click="showModalAddPost" type="button" class="text-link p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">Create Post</div>
+                            <div @click="showModalAddPost" type="button" class="text-light text-decoration-none p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">CREATE POST</div>
                         </li>
                     </ul>
                 </div>
@@ -45,12 +44,12 @@
 
         <!-- posts -->
         <div class="main">
-            <form class="d-flex p-3 mb-3 sticky-top bg-dark" role="search">
+            <form class="search-bar d-flex p-3 mb-3 sticky-top" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn my-btn2" type="submit">Search</button>
             </form>
 
-            <div v-for="item in posts" class="card mb-3">
+            <div v-for="item in posts" class="card-sidebar card mb-3 bg-transparent text-light">
                 <div class="card-header my-0 py-0">
                     <div class="d-flex align-items-center">
                             <img :src="item.author_image" alt="" class="profile-picture">
@@ -82,12 +81,12 @@
                         <p class="card-text fs-5 mb-0 pb-1">{{ item.content }}</p>
                         <div class="interact row mb-2 pt-2">
                             <div class="col-md-6">
-                                <button type="button" class="btn my-btn-like rounded-pill">
+                                <button type="button" class="btn my-btn-like rounded-pill mt-2">
                                     <i class="fa-regular fa-heart me-3"><span class="ms-1">0</span></i>
                                 </button>
                             </div>
                             <div class="col-md-6">
-                                <button type="button" class="btn my-btn-comment rounded-pill" data-bs-toggle="modal" data-bs-target="#postdetail">
+                                <button type="button" class="btn my-btn-comment rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#postdetail">
                                     <i class="fa-regular fa-comment me-3"><span class="ms-1">{{ item.comment_count }}</span></i>
                                 </button>
                             </div>
@@ -99,7 +98,7 @@
 
         <!-- profile card -->
         <div class="aside my-sidebar">
-            <div class="card sticky-top border-0">
+            <div class="card-sidebar card sticky-top bg-transparent text-light">
                 <div class="card-body">
                     <img :src="userImage" class="card-img-top rounded-circle m-4" alt="profile" style="width:150px;">
                     <h3 class="text-center py-0 my-0">{{ userUsername }}</h3>

@@ -1,19 +1,16 @@
 <template>
     <div class="container">
-    <div class="row mt-5">
+    <div class="mt-5 d-flex flex-row justify-content-evenly">
         <!-- sidebar desktop -->
-        <div class="col-md-3 my-sidebar">
-            <h1 class="text-light ">Posts</h1>
-            <div>
-                <div class="card">
+        
+        <div class="aside sidebar my-sidebar">
+            <h1 class="text-light">Posts</h1>
+            <div class="card sticky-top">
                 <div class="card-body">
                     <div class="title d-flex align-items-center mb-3">
                         <img src="../../public/img/logo.png" alt="" class="img-fluid" style="width: 25px;">
-                        <h3 class="ms-2 fs-3 card-title mb-0">Bubblink</h3>
-                    </div>
-                    <img :src="userImage" class="card-img-top border" alt="...">
-                    <h4 class="text-center">{{ userUsername }}</h4>
-                    
+                        <h3 class="ms-2 fs-3 card-title mb-0 me-4">Bubblink</h3>
+                    </div>                    
                     <ul class="list-unstyled">
                         <li class="list-item">
                             <Router-link class="text-link p-1 fs-5 d-block rounded my-1" to="/home">Home</Router-link>
@@ -25,14 +22,8 @@
                             <div @click="showModalAddPost" type="button" class="text-link p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">Create Post</div>
                         </li>
                     </ul>
-                    <form @submit.prevent="logout">
-                        <button type="submit" class="btn my-btn">
-                            {{ loading ? 'Please wait...' : 'Logout'}}
-                        </button>
-                    </form>
                 </div>
                 </div>
-            </div>
         </div>
 
         <!-- sidebar phone -->
@@ -53,18 +44,18 @@
         </div>
 
         <!-- posts -->
-        <div class="col-md-8">
-            <form class="d-flex mb-3" role="search">
+        <div class="main">
+            <form class="d-flex p-3 mb-3 sticky-top bg-dark" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn my-btn2" type="submit">Search</button>
             </form>
 
             <div v-for="item in posts" class="card mb-3">
-                <div class="card-header">
-                    <div class="d-flex align-items-center justify-content-center">
+                <div class="card-header my-0 py-0">
+                    <div class="d-flex align-items-center">
                             <img :src="item.author_image" alt="" class="profile-picture">
-                            <div class="">
-                                <h3 class="ms-2 mb-0 mt-2 fs-5 card-title">{{ item.author }}</h3>
+                            <div class="m-0 p-0">
+                                <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ item.author }}</h3>
                                 <p class="ms-2 fs-6 text-body-secondary">{{ item.created_at }}</p>
                             </div>
                         
@@ -84,22 +75,41 @@
                     </div>
                 </div>
                 <div v-if="item.image">
-                    <img class="post-image" :src="item.image" alt="post-image">
+                    <img class="post-image image-fluid" :src="item.image" alt="post-image">
                 </div>
-                <div class="card-body">
+                <div class="card-body pt-2">
                     <div class="container">
-                        <p class="card-text fs-5 ">{{ item.content }}</p>
-                        <div class="interact d-flex mb-2 pt-2 border-top">
-                            <div class="like">
-                                <i class="fa-regular fa-heart me-3"><span class="ms-1">0</span></i>
+                        <p class="card-text fs-5 mb-0 pb-1">{{ item.content }}</p>
+                        <div class="interact row mb-2 pt-2">
+                            <div class="col-md-6">
+                                <button type="button" class="btn my-btn-like rounded-pill">
+                                    <i class="fa-regular fa-heart me-3"><span class="ms-1">0</span></i>
+                                </button>
                             </div>
-                            <div class="comment">
-                                <i class="fa-regular fa-comment me-3"><span class="ms-1">{{ item.comment_count }}</span></i>
+                            <div class="col-md-6">
+                                <button type="button" class="btn my-btn-comment rounded-pill" data-bs-toggle="modal" data-bs-target="#postdetail">
+                                    <i class="fa-regular fa-comment me-3"><span class="ms-1">{{ item.comment_count }}</span></i>
+                                </button>
                             </div>
                         </div>
-                        <button type="button" class="btn my-btn p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#postdetail">Detail</button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- profile card -->
+        <div class="aside my-sidebar">
+            <div class="card sticky-top border-0">
+                <div class="card-body">
+                    <img :src="userImage" class="card-img-top rounded-circle m-4" alt="profile" style="width:150px;">
+                    <h3 class="text-center py-0 my-0">{{ userUsername }}</h3>
+                    <p class="text-center text-secondary">{{ userRole }}</p>
+                </div>
+                <form @submit.prevent="logout">
+                    <button type="submit" class="my-btn py-2 fs-5">
+                        {{ loading ? 'Please wait...' : 'Logout'}}
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -139,13 +149,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Detail</h1>
+            <h4 class="modal-title" id="exampleModalLabel">Detail</h4>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-            <div class="d-flex align-items-center mb-3">
-                <img src="../../public/img/vbg.jpg" alt="" class="profile-picture">
-                <h3 class="ms-2 fs-5 card-title mb-0">Bubblink</h3>
+        <div class="modal-body mt-1 pt-1">
+            <div class="d-flex align-items-center m-0">
+                <img src="" alt="" class="profile-picture ">
+                    <div class="">
+                        <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">Hayu</h3>
+                        <p class="ms-2 fs-6 text-body-secondary">y</p>
+                    </div>
                 <div class="ms-auto">
                     <div class="dropdown">
                         <button class="btn btn-link text-dark dropdown-toggle" type="button" id="optionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
@@ -170,31 +183,30 @@
                         <i class="fa-regular fa-comment me-3"><span class="ms-1">0</span></i>
                     </div>
                 </div>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <h6 class="card-subtitle mb-2 text-body-secondary border-top border-secondary pt-2">26-Feb-2023</h6>
+                <p class="card-text mb-2">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </div>
 
-            <div class="comment p-3">
-                <h2>Comments</h2>
-                <ul class="list-group list-group-flush pt-3">
-                    <li class="list-group-item border-0 pt-3">
-                        <div class="commentator d-flex">
-                            <img src="../../public/img/vbg.jpg" alt="" class="profile-picture">
-                            <h3 class="ms-2 fs-5 card-title mb-0">Bubblink</h3>
-                        </div>
-                        <p class="m-2">Halo ngab</p>
-                    </li>
-                    <li class="list-group-item border-0">
-                        <div class="commentator d-flex">
-                            <img src="../../public/img/vbg.jpg" alt="" class="profile-picture">
-                            <h3 class="ms-2 fs-5 card-title mb-0">Bubblink</h3>
-                        </div>
-                        <p class="m-2">Halo ngab</p>
-                    </li>
-                    <li class="list-group-item border-0">
-                        <div class="commentator d-flex">
-                            <img src="../../public/img/vbg.jpg" alt="" class="profile-picture">
-                            <h3 class="ms-2 fs-5 card-title mb-0">Bubblink</h3>
+            <div class="comment">
+                <h2 class="ps-1 border-top pt-2">Comments</h2>
+                <ul class="px-0 mx-0">
+                    <li class="list-group-item bg-light px-3 pb-3">
+                        <div class="d-flex align-items-center m-0">
+                            <img src="" alt="" class="profile-picture ">
+                                <div class="">
+                                    <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">Hayu</h3>
+                                    <p class="ms-2 fs-6 text-body-secondary">y</p>
+                                </div>
+                            <div class="ms-auto">
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-dark dropdown-toggle" type="button" id="optionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="optionsMenu">
+                                        <li><a class="dropdown-item" href="#">Edit</a></li>
+                                        <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                         <p class="m-2">Halo ngab</p>
                     </li>

@@ -44,8 +44,8 @@
 
         <!-- posts -->
         <div class="main" style="width:470px;">
-            <form class="search-bar d-flex p-3 mb-3 sticky-top" role="search" >
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form @submit.prevent="search" class="search-bar d-flex p-3 mb-3 sticky-top" role="search" >
+                <input v-model="keySearch" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn my-btn2" type="submit">Search</button>
             </form>
 
@@ -262,6 +262,7 @@ export default {
             loading:false,
             loadingModal:false,
             submitPreventModalName:'',
+            keySearch:'',
         }
     },
     mounted(){        
@@ -559,6 +560,9 @@ export default {
             }finally{
                 this.loadingModal = false;
             }
+        },
+        search(){
+            this.$router.push({ path: '/search', query: { key: this.keySearch } });
         }
 
     }

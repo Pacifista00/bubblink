@@ -8,17 +8,17 @@
                 <div class="card-body">
                     <div class="title d-flex align-items-center mb-3">
                         <img src="../../public/img/logo.png" alt="" class="img-fluid" style="width: 25px;">
-                        <h3 class="ms-2 fs-3 card-title mb-0 me-4 text-light">Bubblink</h3>
+                        <h3 class="ms-2 fs-3 card-title mb-0 me-4 text-light web-title">BUBBLINK</h3>
                     </div>                    
                     <ul class="list-unstyled">
                         <li class="list-item">
-                            <Router-link class="text-light text-decoration-none p-1 fs-5 d-block rounded my-1" to="/home">HOME</Router-link>
+                            <Router-link class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" to="/home">HOME</Router-link>
                         </li>
                         <li class="list-item">
-                            <Router-link class="text-light text-decoration-none p-1 fs-5 d-block rounded my-1" to="/profile">PROFILE</Router-link>
+                            <Router-link class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" to="/profile">PROFILE</Router-link>
                         </li>
                         <li class="list-item">
-                            <div @click="showModalAddPost" type="button" class="text-light p-1 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">CREATE POST</div>
+                            <div @click="showModalAddPost" type="button" class="text-light p-1 fs-6 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">CREATE POST</div>
                         </li>
                     </ul>
                 </div>
@@ -49,7 +49,7 @@
                 <button class="btn my-btn2" type="submit">Search</button>
             </form>
             <div class="">
-                <div class="card mx-auto card-sidebar text-center bg-transparent text-white mb-3">
+                <div class="border-0 card mx-auto card-sidebar text-center my-bg-dark text-white mb-3">
                     <div class="card-body d-flex flex-row">
                         <div class="">
                             <div class="position-relative rounded-circle">
@@ -70,7 +70,7 @@
 
                     </div>
                     <div class="card-footer text-gray border-top">
-                        Created at : 2 days ago
+                        Created at : {{formatTimeAgo(userCreatedat)}}
                     </div>
                 </div>
             </div>
@@ -82,8 +82,8 @@
                     <div class="d-flex align-items-center">
                             <img :src="item.author_image" alt="" class="profile-picture">
                             <div class="m-0 p-0">
-                                <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ item.author }}</h3>
-                                <p class="ms-2 fs-6 text-gray">{{ item.created_at }}</p>
+                                <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ item.author }}<i v-if="item.author_role == 'admin'" class="ms-1 p-0 text-verified fa-solid fa-circle-check"></i></h3>
+                                <p class="ms-2 fs-6 text-gray">{{ formatTimeAgo(item.created_at) }}</p>
                             </div>
                         
                         <div class="ms-auto">
@@ -122,9 +122,9 @@
         <!-- profile card -->
         <div class="aside my-sidebar">
             <div class="card card-sidebar bg-transparent text-light sticky-top border-0">
-                <div class="card-body">
+                <div class="card-body my-bg-dark">
                     <img :src="userImage" class="card-img-top rounded-circle m-4" alt="profile" style="width:150px; height:150px; object-fit:cover;">
-                    <h3 class="text-center py-0 my-0">{{ userUsername }}</h3>
+                    <h3 class="text-center py-0 my-0">{{ userUsername }}<i v-if="userRole == 'admin'" class="ms-1 p-0 text-verified fa-solid fa-circle-check"></i></h3>
                     <p class="text-center text-secondary">{{ userRole }}</p>
                 </div>
                 <form @submit.prevent="logout">
@@ -144,7 +144,7 @@
         <div class="modal-content">
         <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Add Post</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button @click="closePost" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
                 <div class="mb-2">
@@ -158,7 +158,7 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn my-btn3">
-                    {{ loading ? 'Please wait...' : 'Submit' }}
+                    {{ loadingModal ? 'Please wait...' : 'Submit' }}
                 </button>
             </div>
         </div>
@@ -191,7 +191,7 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn my-btn3">
-                    {{ loading ? 'Please wait...' : 'Submit' }}
+                    {{ loadingModal ? 'Please wait...' : 'Submit' }}
                 </button>
             </div>
         </div>
@@ -211,8 +211,8 @@
             <div class="d-flex align-items-center m-0">
                 <img :src="post.author_image" alt="" class="profile-picture ">
                     <div class="">
-                        <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ post.author }}</h3>
-                        <p class="ms-2 fs-6 text-body-secondary">{{ post.created_at }}</p>
+                        <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ post.author }}<i v-if="post.author_role == 'admin'" class="ms-1 p-0 text-verified fa-solid fa-circle-check"></i></h3>
+                        <p class="ms-2 fs-6 text-body-secondary">{{ formatTimeAgo(post.created_at) }}</p>
                     </div>
             </div>
             <div class="container">
@@ -229,8 +229,8 @@
                         <div class="d-flex align-items-center m-0">
                             <img :src="comment.author_image" alt="" class="profile-picture-comment ">
                                 <div class="">
-                                    <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ comment.author }}</h3>
-                                    <p class="ms-2 fs-6 text-body-secondary">{{ comment.created_at }}</p>
+                                    <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ comment.author }}<i v-if="comment.author_role == 'admin'" class="text-verified ms-1 p-0 tex-verified fa-solid fa-circle-check"></i></h3>
+                                    <p class="ms-2 fs-6 text-body-secondary">{{ formatTimeAgo(comment.created_at) }}</p>
                                 </div>
                             <div class="ms-auto">
                                 <div class="dropdown">
@@ -252,7 +252,9 @@
         </div>
         <form @submit.prevent="addComment(post.id)" class="search-bar d-flex p-3 sticky-top" role="search" >
             <input v-model="commentText" class="form-control me-2" type="search" placeholder="Add comment!">
-            <button type="" class="btn my-btn2">Send</button>
+            <button type="" class="btn my-btn2">
+                {{ loadingModal ? 'Please wait...' : 'Send' }}
+            </button>
         </form>
         </div>
     </div>
@@ -290,7 +292,7 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn my-btn3">
-                    {{ loading ? 'Please wait...' : 'Submit' }}
+                    {{ loadingModal ? 'Please wait...' : 'Submit' }}
                 </button>
             </div>
         </div>
@@ -314,7 +316,7 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn my-btn3">
-                    {{ loading ? 'Please wait...' : 'Submit' }}
+                    {{ loadingModal ? 'Please wait...' : 'Submit' }}
                 </button>
             </div>
         </div>
@@ -324,6 +326,7 @@
 </template>
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 export default {
     data(){
@@ -335,6 +338,7 @@ export default {
             userRole: '',
             userEmail: '',
             userBio: '',
+            userCreatedat: '',
             userImage: '',
             post:[],
             posts:[],
@@ -346,6 +350,7 @@ export default {
             commentId:'',
             commentTextModal:'',
             loading:false,
+            loadingModal:false,
             submitPreventModalName:'',
         }
     },
@@ -363,10 +368,12 @@ export default {
             this.userImage = response.data.data.picture,
             this.userEmail = response.data.data.email,
             this.userBio = response.data.data.bio,
-            this.userId = response.data.data.id
+            this.userId = response.data.data.id,
+            this.userCreatedat = response.data.data.created_at
             ))
         .catch(error => {
-            console.log(error)
+            localStorage.removeItem('token'),
+            this.$router.push({ path: '/', query: { alertMessage : 'Your session has ended!' } });
         })
 
         
@@ -376,9 +383,22 @@ export default {
             }
         })
         .then(response => (
-            this.posts = response.data.data
+            this.posts = response.data.data.reverse()
             ))
     },methods : {
+        formatTimeAgo(created_at) {
+            const currentTime = moment();
+            const postTime = moment(created_at);
+            const diffMinutes = currentTime.diff(postTime, 'minutes');
+
+            if (diffMinutes < 1) {
+                return 'just now';
+            } else if (diffMinutes < 60) {
+                return `${diffMinutes} minutes ago`;
+            } else {
+                return postTime.fromNow();
+            }
+        },
         showModal(header, message) {
             this.headerMessage = header;
             this.message = message;
@@ -400,7 +420,6 @@ export default {
         async showModalEditPost(postId){
             try{
                 this.submitPreventModalName = "editPost"
-                this.loading = true;
                 this.postId = postId;
                 
                 const token = localStorage.getItem('token');
@@ -416,8 +435,6 @@ export default {
         
             }catch(err){
                 console.error(err);
-            }finally{
-                this.loading = false;
             }
         },
         async logout(){
@@ -442,7 +459,7 @@ export default {
         },
         async addPost(){
             try{
-                this.loading=true;
+                this.loadingModal=true;
                 const formData = new FormData();
 
                 formData.append("content", this.content);
@@ -465,12 +482,12 @@ export default {
             }catch(err){
                 console.error('Add post failed:', err);
             }finally {
-                this.loading = false;
+                this.loadingModal = false;
             }
         },
         async editPost(postId){
             try{
-                this.loading = true;
+                this.loadingModal = true;
                 const formData = new FormData();
 
                 formData.append("content", this.content);
@@ -491,7 +508,7 @@ export default {
             }catch(err){
                 console.error('Edit post failed:', err);
             }finally{
-                this.loading = false;
+                this.loadingModal = false;
                 this.postId = '';
             }
         },
@@ -529,10 +546,11 @@ export default {
         },closePost(){
             this.post=[];
             this.comments=[];
+            this.content=[];
         },
         async addComment(postId){
             try{
-                this.loading=true;
+                this.loadingModal=true;
 
                 const token = localStorage.getItem('token');
                 await axios.post(`http://127.0.0.1:8000/api/comment/${postId}`, {
@@ -549,7 +567,7 @@ export default {
             }catch(err){
                 console.error('Add coment failed:', err);
             }finally {
-                this.loading = false;
+                this.loadingModal = false;
             }
         },
         async getComment(postId){
@@ -574,8 +592,6 @@ export default {
         },
         async showModalEditComment(commentId){
             try{
-                this.loading = true;
-                
                 const token = localStorage.getItem('token');
                 const response = await axios.get(`http://127.0.0.1:8000/api/comment/${commentId}`,{
                     headers: {
@@ -588,13 +604,11 @@ export default {
         
             }catch(err){
                 console.error(err);
-            }finally{
-                this.loading = false;
             }
         },
         async editComment(commentId){
             try{
-                this.loading = true;
+                this.loadingModal = true;
 
                 const token = localStorage.getItem('token');
                 await axios.post(`http://127.0.0.1:8000/api/comment/${commentId}/update`, {
@@ -613,7 +627,7 @@ export default {
             }catch(err){
                 console.error('Edit comment failed:', err);
             }finally{
-                this.loading = false;
+                this.loadingModal = false;
             }
         },
         async deleteComment(commentId){
@@ -634,7 +648,7 @@ export default {
         },
         async editProfile(userId){
             try{
-                this.loading = true;
+                this.loadingModal = true;
 
                 const token = localStorage.getItem('token');
                 await axios.post(`http://127.0.0.1:8000/api/user/${userId}/update`, {
@@ -653,13 +667,13 @@ export default {
             }catch(err){
                 console.error('Edit profile failed:', err);
             }finally{
-                this.loading = false;
+                this.loadingModal = false;
                 this.postId = '';
             }
         },
         async editPicture(userId){
             try{
-                this.loading=true;
+                this.loadingModal=true;
                 const formData = new FormData();
 
                 formData.append("picture", this.file);
@@ -678,7 +692,7 @@ export default {
             }catch(err){
                 console.error('Update profile failed:', err);
             }finally {
-                this.loading = false;
+                this.loadingModal = false;
             }
         },
         

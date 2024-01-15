@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Genos:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+
 body{
     min-height: 100vh !important;
     background-image: linear-gradient(to right,#2E0249, #000000);
     /* background-color: #000; */
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: "Nunito", sans-serif;
 }
 
 .card, .modal-content{
@@ -64,7 +67,7 @@ body{
 }
 .my-btn-comment{
     border: none;
-    background-color: #0079FF;
+    background-color: #892CDC;
     width: 100%;
     color: #FFFFFF;
 }
@@ -110,6 +113,9 @@ body{
     background-color: #FFFFFF !important;
     color: #892CDC;
 }
+.my-bg-dark{
+    background-image: linear-gradient(35deg, #282A3A, #000000);
+}
 .my-form-control{
     border: none;
     outline: none;
@@ -131,6 +137,9 @@ body{
 }
 .text-gray{
     color: #AAAAAA;
+}
+.text-verified{
+    color: #0079FF;
 }
 .phone-navbar{
     display: none;

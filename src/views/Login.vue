@@ -49,6 +49,7 @@ export default {
     return {
       email: '',
       password:'',
+      userUsername:'',
       headerMessage:'',
       message: '',
       loading: false,
@@ -82,7 +83,21 @@ export default {
 
             localStorage.setItem('token', token);
 
-            this.$router.push('/home');
+        
+            await axios.get('http://127.0.0.1:8000/api/loggeduser',{
+                headers: {
+                    Authorization : `Bearer ${token}`
+                }
+            })
+            .then(response => (
+                this.userUsername = response.data.data.username
+                ))
+            .catch(error => {
+                console.log(error)
+            })
+            
+            
+            this.$router.push({ path: '/home', query: { alertMessage: `Welcome! Have a nice day ${this.userUsername}..` } });
     
         }catch(err){
             this.showModal('Error','Login failed. Please try again.');

@@ -48,11 +48,14 @@
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn my-btn2" type="submit">Search</button>
             </form>
-            <div class="d-flex" role="search">
+            <div class="">
                 <div class="card mx-auto card-sidebar text-center bg-transparent text-white mb-3">
                     <div class="card-body d-flex flex-row">
                         <div class="">
-                            <img :src="userImage" class="card-img-top rounded-circle mx-4 my-2" alt="profile" style="width:180px;">
+                            <div class="position-relative rounded-circle">
+                                <img :src="userImage" class="rounded-circle card-img-top mx-4 my-2" alt="profile" style="width:180px; height:180px; object-fit:cover;">
+                                <div type="button" class="btn-edit-profile position-absolute p-2 rounded-circle" data-bs-toggle="modal" data-bs-target="#modalEditPicture"><i class="fa-solid fa-pen"></i></div>
+                            </div>
                             <div type="button" class=" btn my-btn3 mx-auto text-light px-3 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalEditProfile">Edit Profile</div>
                         </div>
                         <div class="text-start">
@@ -120,7 +123,7 @@
         <div class="aside my-sidebar">
             <div class="card card-sidebar bg-transparent text-light sticky-top border-0">
                 <div class="card-body">
-                    <img :src="userImage" class="card-img-top rounded-circle m-4" alt="profile" style="width:150px;">
+                    <img :src="userImage" class="card-img-top rounded-circle m-4" alt="profile" style="width:150px; height:150px; object-fit:cover;">
                     <h3 class="text-center py-0 my-0">{{ userUsername }}</h3>
                     <p class="text-center text-secondary">{{ userRole }}</p>
                 </div>
@@ -294,6 +297,30 @@
     </form>
     </div>
 </div>
+<!-- Modal Edit Picture -->
+<div class="modal modal-lg fade" id="modalEditPicture" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form @submit.prevent="editPicture(userId)">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Picture</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+                <div class="mb-2">
+                    <label for="picture" class="col-form-label">Picture:</label><br>
+                    <input type="file" id="picture" @change="imageHandler">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn my-btn3">
+                    {{ loading ? 'Please wait...' : 'Submit' }}
+                </button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
 </template>
 <script>
 import axios from 'axios';
@@ -312,7 +339,7 @@ export default {
             post:[],
             posts:[],
             comments:[],
-            postImage:null,
+            file:null,
             postId:'',
             content:'',
             commentText:'',
@@ -365,7 +392,7 @@ export default {
             }
         },
         imageHandler(event) {
-            this.postImage = event.target.files[0];
+            this.file = event.target.files[0];
         },
         showModalAddPost(){
             this.submitPreventModalName = "addPost"
@@ -385,7 +412,7 @@ export default {
 
                 this.postId = response.data.data.id;
                 this.content = response.data.data.content;
-                this.postImage = response.data.data.image;
+                this.file = response.data.data.image;
         
             }catch(err){
                 console.error(err);
@@ -419,8 +446,8 @@ export default {
                 const formData = new FormData();
 
                 formData.append("content", this.content);
-                if(this.postImage){
-                    formData.append("image", this.postImage)
+                if(this.file){
+                    formData.append("image", this.file)
                 }
 
                 const token = localStorage.getItem('token');
@@ -433,7 +460,7 @@ export default {
 
                 window.location.reload();
                 this.content = ''
-                this.postImage = ''
+                this.file = ''
         
             }catch(err){
                 console.error('Add post failed:', err);
@@ -447,8 +474,8 @@ export default {
                 const formData = new FormData();
 
                 formData.append("content", this.content);
-                if(this.postImage){
-                    formData.append("image", this.postImage);
+                if(this.file){
+                    formData.append("image", this.file);
                 }
 
                 const token = localStorage.getItem('token');
@@ -629,7 +656,31 @@ export default {
                 this.loading = false;
                 this.postId = '';
             }
-        }
+        },
+        async editPicture(userId){
+            try{
+                this.loading=true;
+                const formData = new FormData();
+
+                formData.append("picture", this.file);
+
+                const token = localStorage.getItem('token');
+                await axios.post(`http://127.0.0.1:8000/api/user/${userId}/picture`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                window.location.reload();
+                this.file = ''
+        
+            }catch(err){
+                console.error('Update profile failed:', err);
+            }finally {
+                this.loading = false;
+            }
+        },
         
     }
 }

@@ -95,7 +95,7 @@
         <div class="aside my-sidebar">
             <div class="card-sidebar card sticky-top bg-transparent text-light">
                 <div class="card-body">
-                    <img :src="userImage" class="card-img-top rounded-circle m-4" alt="profile" style="width:150px;">
+                    <img :src="userImage" class="card-img-top rounded-circle m-4" alt="profile" style="width:150px; height:150px; object-fit:cover;">
                     <h3 class="text-center py-0 my-0">{{ userUsername }}</h3>
                     <p class="text-center text-secondary">{{ userRole }}</p>
                 </div>

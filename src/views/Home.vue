@@ -82,7 +82,7 @@
                     <div class="container">
                         <p class="card-text fs-6 mb-0 pb-1">{{ item.content }}</p>
                         <div class="interact mb-2 pt-2">
-                            <button @click="postDetail(item.id)" type="button" class="btn my-btn-comment rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#postdetail">
+                            <button @click="openPost(item.id)" type="button" class="btn my-btn-comment rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#postdetail">
                                 <i class="fa-regular fa-comment me-3"><span class="ms-1">{{ item.comment_count }}</span></i>
                             </button>
                         </div>
@@ -164,12 +164,12 @@
             <div class="comment">
                 <h2 class="ps-1 border-top pt-2">Comments - {{ post.comment_count }}</h2>
                 <ul class="px-0 mx-0">
-                    <li class="list-group-item bg-light px-3 pb-1">
+                    <li v-for="comment in comments" class="list-group-item bg-light px-3 pb-3">
                         <div class="d-flex align-items-center m-0">
-                            <img src="" alt="" class="profile-picture-comment ">
+                            <img :src="comment.author_image" alt="" class="profile-picture-comment ">
                                 <div class="">
-                                    <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">Hayu</h3>
-                                    <p class="ms-2 fs-6 text-body-secondary">y</p>
+                                    <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ comment.author }}</h3>
+                                    <p class="ms-2 fs-6 text-body-secondary">{{ comment.created_at }}</p>
                                 </div>
                             <div class="ms-auto">
                                 <div class="dropdown">
@@ -177,13 +177,13 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="optionsMenu">
-                                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                                        <li><a class="dropdown-item" href="#">Delete</a></li>
+                                        <li><div @click="showModalEditComment(comment.id)" type="button" class="dropdown-item my-dropdown"  data-bs-toggle="modal" data-bs-target="#showModalEditComment">Edit</div></li>
+                                        <li><div @click="deleteComment(comment.id)" type="button" class="dropdown-item my-dropdown" href="#">Delete</div></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <p class="ms-1">Halo ngab</p>
+                        <p class="m-2">{{ comment.content }}</p>
                     </li>
                 </ul>
             </div>
@@ -211,6 +211,31 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Edit Comment -->
+<div class="modal modal-lg fade" id="showModalEditComment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form @submit.prevent="editComment(commentId)">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Comment</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+                <div class="mb-2">
+                    <label for="comment" class="col-form-label">Content:</label>
+                    <textarea v-model="commentTextModal" class="form-control" id="comment"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn my-btn3">
+                    {{ loading ? 'Please wait...' : 'Submit' }}
+                </button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
 </template>
 
 <script>
@@ -226,10 +251,13 @@ export default {
             userImage: '',
             post:[],
             posts:[],
+            comments:[],
             postImage:null,
             postId:'',
             content:'',
             commentText:'',
+            commentId:'',
+            commentTextModal:'',
             loading:false,
             submitPreventModalName:'',
         }
@@ -436,6 +464,87 @@ export default {
                 this.loading = false;
             }
         },
+        async getComment(postId){
+            try{
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`http://127.0.0.1:8000/api/comments/${postId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                this.comments = response.data.data;
+
+        
+            }catch(err){
+                console.error('Query failed:', err);
+            }
+        },
+        openPost(postId){
+            this.postDetail(postId);
+            this.getComment(postId);
+        },
+        async showModalEditComment(commentId){
+            try{
+                this.loading = true;
+                
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`http://127.0.0.1:8000/api/comment/${commentId}`,{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                this.commentTextModal = response.data.data.content;
+                this.commentId = response.data.data.id;
+        
+            }catch(err){
+                console.error(err);
+            }finally{
+                this.loading = false;
+            }
+        },
+        async editComment(commentId){
+            try{
+                this.loading = true;
+
+                const token = localStorage.getItem('token');
+                await axios.post(`http://127.0.0.1:8000/api/comment/${commentId}/update`, {
+                    content: this.commentTextModal
+                },{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                this.commentTextModal='';
+                this.commentId='';
+                window.location.reload();
+
+        
+            }catch(err){
+                console.error('Edit comment failed:', err);
+            }finally{
+                this.loading = false;
+            }
+        },
+        async deleteComment(commentId){
+            try{
+                const token = localStorage.getItem('token');
+                await axios.delete(`http://127.0.0.1:8000/api/comment/${commentId}/delete`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                window.location.reload();
+
+        
+            }catch(err){
+                console.error('Delete comment failed:', err);
+            }
+        }
+
     }
 }
 </script>

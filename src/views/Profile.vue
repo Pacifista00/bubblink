@@ -60,7 +60,7 @@
                             <p class="mb-0">Role : <span class="text-gray">{{ userRole }}</span></p>
                             <p class="mb-0">Email : <span class="text-gray">{{ userEmail }}</span></p>
                             <div class="">Bio : 
-                                <p class="border p-2" style="width:200px;">{{ userBio }}</p>
+                                <p class="border border-secondary rounded p-2" style="width:200px;">{{ userBio }}</p>
                             </div>
                         </div>
 
@@ -166,7 +166,7 @@
 <!-- modal profile -->
 <div class="modal modal-lg fade" id="modalEditProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form @submit.prevent="editProfile">
+        <form @submit.prevent="editProfile(userId)">
         <div class="modal-content">
         <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Profile</h1>
@@ -174,20 +174,16 @@
         </div>
         <div class="modal-body">
                 <div class="mb-2">
-                    <label for="image" class="col-form-label">Profile Picture</label><br>
-                    <input type="file" id="image" @change="imageHandler">
-                </div>
-                <div class="mb-2">
                     <label for="username" class="col-form-label">Username:</label>
-                    <input type="text" v-model="content" class="form-control" id="username">
+                    <input type="text" v-model="userUsername" class="form-control" id="username">
                 </div>
                 <div class="mb-2">
                     <label for="email" class="col-form-label">Email:</label>
-                    <input type="text" v-model="content" class="form-control" id="email">
+                    <input type="text" v-model="userEmail" class="form-control" id="email">
                 </div>
                 <div class="mb-2">
                     <label for="bio" class="col-form-label">Bio:</label>
-                    <textarea v-model="content" class="form-control" id="bio"></textarea>
+                    <textarea v-model="userBio" class="form-control" id="bio"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -307,6 +303,7 @@ export default {
         return {
             headerMessage : '',
             message : '',
+            userId:'',
             userUsername: '',
             userRole: '',
             userEmail: '',
@@ -338,7 +335,8 @@ export default {
             this.userRole = response.data.data.role,
             this.userImage = response.data.data.picture,
             this.userEmail = response.data.data.email,
-            this.userBio = response.data.data.bio
+            this.userBio = response.data.data.bio,
+            this.userId = response.data.data.id
             ))
         .catch(error => {
             console.log(error)
@@ -605,6 +603,31 @@ export default {
         
             }catch(err){
                 console.error('Delete comment failed:', err);
+            }
+        },
+        async editProfile(userId){
+            try{
+                this.loading = true;
+
+                const token = localStorage.getItem('token');
+                await axios.post(`http://127.0.0.1:8000/api/user/${userId}/update`, {
+                    username : this.userUsername,
+                    email : this.userEmail,
+                    bio : this.userBio
+                },{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                window.location.reload();
+
+        
+            }catch(err){
+                console.error('Edit profile failed:', err);
+            }finally{
+                this.loading = false;
+                this.postId = '';
             }
         }
         

@@ -2,7 +2,6 @@
     <div class="container">
     <div class="mt-5 d-flex flex-row justify-content-evenly">
         <!-- sidebar desktop -->
-        
         <div class="aside sidebar my-sidebar">
             <div class="card sidebar-card sticky-top bg-transparent">
                 <div class="card-body">
@@ -15,7 +14,7 @@
                             <Router-link class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" to="/home">HOME</Router-link>
                         </li>
                         <li class="list-item">
-                            <Router-link class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" to="/profile">PROFILE</Router-link>
+                            <Router-link v-if="user.id" class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" :to="{ name: 'Profile', params: { userid: user.id }}">PROFILE</Router-link>
                         </li>
                         <li class="list-item">
                             <div @click="showModalAddPost" type="button" class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">CREATE POST</div>
@@ -95,9 +94,9 @@
         <div class="aside my-sidebar">
             <div class="card-sidebar card sticky-top text-light my-bg-dark">
                 <div class="card-body">
-                    <img :src="userImage" class="card-img-top rounded-circle m-4" alt="profile" style="width:150px; height:150px; object-fit:cover;">
-                    <h3 class="text-center py-0 my-0">{{ userUsername }}<i v-if="userRole == 'admin'" class="ms-1 p-0 text-verified fa-solid fa-circle-check"></i></h3>
-                    <p class="text-center text-secondary">{{ userRole }}</p>
+                    <img :src="user.picture" class="card-img-top rounded-circle m-4" alt="profile" style="width:150px; height:150px; object-fit:cover;">
+                    <h3 class="text-center py-0 my-0">{{ user.username }}<i v-if="user.role == 'admin'" class="ms-1 p-0 text-verified fa-solid fa-circle-check"></i></h3>
+                    <p class="text-center text-secondary">{{ user.role }}</p>
                 </div>
                 <form @submit.prevent="logout">
                     <button type="submit" class="my-btn py-2 fs-5">
@@ -191,7 +190,9 @@
         </div>
             <form @submit.prevent="addComment(post.id)" class="search-bar d-flex p-3 sticky-top" role="search" >
                 <input v-model="commentText" class="form-control me-2" type="search" placeholder="Add comment!">
-                <button type="" class="btn my-btn2">Send</button>
+                <button type="" class="btn my-btn2">
+                    {{ loadingModal ? 'Please wait...' : 'Send' }}
+                </button>
             </form>
         </div>
     </div>
@@ -247,9 +248,8 @@ export default {
         return {
             headerMessage : '',
             message : '',
-            userUsername: '',
-            userRole: '',
-            userImage: '',
+            user:[],
+            userid:'',
             post:[],
             posts:[],
             comments:[],
@@ -266,28 +266,24 @@ export default {
         }
     },
     mounted(){        
-        if (this.$route.query.alertMessage){
-            this.showModal('Alert', this.$route.query.alertMessage);
-        }
-
-
         const token = localStorage.getItem('token');
-        
         axios.get('http://127.0.0.1:8000/api/loggeduser',{
             headers: {
                 Authorization : `Bearer ${token}`
             }
         })
         .then(response => (
-            this.userUsername = response.data.data.username,
-            this.userRole = response.data.data.role,
-            this.userImage = response.data.data.picture
+            this.user = response.data.data
             ))
         .catch(error => {
             localStorage.removeItem('token'),
             this.$router.push({ path: '/', query: { alertMessage : 'Your session has ended!' } });
         })
 
+
+        if (this.$route.query.alertMessage){
+            this.showModal('Alert', this.$route.query.alertMessage);
+        }
 
         axios.get('http://127.0.0.1:8000/api/posts',{
             headers: {
@@ -458,6 +454,8 @@ export default {
             }
         },closePost(){
             this.post=[];
+            this.comments=[];
+            this.content=[];
         },
         async addComment(postId){
             try{

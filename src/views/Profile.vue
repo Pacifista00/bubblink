@@ -15,7 +15,7 @@
                             <Router-link class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" to="/home">HOME</Router-link>
                         </li>
                         <li class="list-item">
-                            <Router-link class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" to="/profile">PROFILE</Router-link>
+                            <Router-link class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" :to="{ name: 'Profile', params: { userid: myUser.id }}" :key="myUser.id">PROFILE</Router-link>
                         </li>
                         <li class="list-item">
                             <div @click="showModalAddPost" type="button" class="text-light p-1 fs-6 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost">CREATE POST</div>
@@ -53,24 +53,24 @@
                     <div class="card-body d-flex flex-row">
                         <div class="">
                             <div class="position-relative rounded-circle">
-                                <img :src="userImage" class="rounded-circle card-img-top mx-4 my-2" alt="profile" style="width:180px; height:180px; object-fit:cover;">
+                                <img :src="user.picture" class="rounded-circle card-img-top mx-4 my-2" alt="profile" style="width:180px; height:180px; object-fit:cover;">
                                 <div type="button" class="btn-edit-profile position-absolute p-2 rounded-circle" data-bs-toggle="modal" data-bs-target="#modalEditPicture"><i class="fa-solid fa-pen"></i></div>
                             </div>
                             <div type="button" class=" btn my-btn3 mx-auto text-light px-3 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalEditProfile">Edit Profile</div>
                         </div>
                         <div class="text-start">
-                            <p class="mb-0">Username : <span class="text-gray">{{ userUsername }}</span></p>
-                            <p class="mb-0">Role : <span class="text-gray">{{ userRole }}</span></p>
-                            <p class="mb-0">Email : <span class="text-gray">{{ userEmail }}</span></p>
+                            <p class="mb-0">Username : <span class="text-gray">{{ user.username }}</span></p>
+                            <p class="mb-0">Role : <span class="text-gray">{{ user.role }}</span></p>
+                            <p class="mb-0">Email : <span class="text-gray">{{ user.email }}</span></p>
                             <div class="">Bio : 
-                                <p class="border border-secondary rounded p-2" style="width:200px;">{{ userBio }}</p>
+                                <p class="border border-secondary rounded p-2" style="width:200px;">{{ user.bio }}</p>
                             </div>
                         </div>
 
 
                     </div>
                     <div class="card-footer text-gray border-top">
-                        Created at : {{formatTimeAgo(userCreatedat)}}
+                        Created at : {{formatTimeAgo(user.created_at)}}
                     </div>
                 </div>
             </div>
@@ -123,9 +123,9 @@
         <div class="aside my-sidebar">
             <div class="card card-sidebar bg-transparent text-light sticky-top border-0">
                 <div class="card-body my-bg-dark">
-                    <img :src="userImage" class="card-img-top rounded-circle m-4" alt="profile" style="width:150px; height:150px; object-fit:cover;">
-                    <h3 class="text-center py-0 my-0">{{ userUsername }}<i v-if="userRole == 'admin'" class="ms-1 p-0 text-verified fa-solid fa-circle-check"></i></h3>
-                    <p class="text-center text-secondary">{{ userRole }}</p>
+                    <img :src="myUser.picture" class="card-img-top rounded-circle m-4" alt="profile" style="width:150px; height:150px; object-fit:cover;">
+                    <h3 class="text-center py-0 my-0">{{ myUser.username }}<i v-if="user.role == 'admin'" class="ms-1 p-0 text-verified fa-solid fa-circle-check"></i></h3>
+                    <p class="text-center text-secondary">{{ myUser.role }}</p>
                 </div>
                 <form @submit.prevent="logout">
                     <button type="submit" class="my-btn py-2 fs-5">
@@ -169,7 +169,7 @@
 <!-- modal profile -->
 <div class="modal modal-lg fade" id="modalEditProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form @submit.prevent="editProfile(userId)">
+        <form @submit.prevent="editProfile(user.id)">
         <div class="modal-content">
         <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Profile</h1>
@@ -178,15 +178,15 @@
         <div class="modal-body">
                 <div class="mb-2">
                     <label for="username" class="col-form-label">Username:</label>
-                    <input type="text" v-model="userUsername" class="form-control" id="username">
+                    <input type="text" v-model="user.username" class="form-control" id="username">
                 </div>
                 <div class="mb-2">
                     <label for="email" class="col-form-label">Email:</label>
-                    <input type="text" v-model="userEmail" class="form-control" id="email">
+                    <input type="text" v-model="user.email" class="form-control" id="email">
                 </div>
                 <div class="mb-2">
                     <label for="bio" class="col-form-label">Bio:</label>
-                    <textarea v-model="userBio" class="form-control" id="bio"></textarea>
+                    <textarea v-model="user.bio" class="form-control" id="bio"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -302,7 +302,7 @@
 <!-- Modal Edit Picture -->
 <div class="modal modal-lg fade" id="modalEditPicture" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form @submit.prevent="editPicture(userId)">
+        <form @submit.prevent="editPicture(user.id)">
         <div class="modal-content">
         <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Picture</h1>
@@ -333,13 +333,8 @@ export default {
         return {
             headerMessage : '',
             message : '',
-            userId:'',
-            userUsername: '',
-            userRole: '',
-            userEmail: '',
-            userBio: '',
-            userCreatedat: '',
-            userImage: '',
+            user:'',
+            myUser:'',
             post:[],
             posts:[],
             comments:[],
@@ -356,6 +351,12 @@ export default {
     },
     mounted() {
         const token = localStorage.getItem('token');
+        if (this.$route.params.userid){
+            this.idUser = this.$route.params.userid
+        }
+        if (this.$route.query.idUser){
+            this.idUser = this.$route.query.idUser
+        }
         
         axios.get('http://127.0.0.1:8000/api/loggeduser',{
             headers: {
@@ -363,21 +364,26 @@ export default {
             }
         })
         .then(response => (
-            this.userUsername = response.data.data.username,
-            this.userRole = response.data.data.role,
-            this.userImage = response.data.data.picture,
-            this.userEmail = response.data.data.email,
-            this.userBio = response.data.data.bio,
-            this.userId = response.data.data.id,
-            this.userCreatedat = response.data.data.created_at
+            this.myUser = response.data.data
             ))
         .catch(error => {
             localStorage.removeItem('token'),
             this.$router.push({ path: '/', query: { alertMessage : 'Your session has ended!' } });
         })
 
+        axios.get(`http://127.0.0.1:8000/api/user/${this.idUser}`,{
+            headers: {
+                Authorization : `Bearer ${token}`
+            }
+        })
+        .then(response => (
+            this.user = response.data.data
+        ))
+        .catch(error => {
+            console.log(error)
+        })
         
-        axios.get('http://127.0.0.1:8000/api/mypost',{
+        axios.get(`http://127.0.0.1:8000/api/peoplepost/${this.idUser}`,{
             headers: {
                 Authorization : `Bearer ${token}`
             }
@@ -652,9 +658,9 @@ export default {
 
                 const token = localStorage.getItem('token');
                 await axios.post(`http://127.0.0.1:8000/api/user/${userId}/update`, {
-                    username : this.userUsername,
-                    email : this.userEmail,
-                    bio : this.userBio
+                    username : this.myUser.username,
+                    email : this.myUser.email,
+                    bio : this.myUser.bio
                 },{
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -694,8 +700,7 @@ export default {
             }finally {
                 this.loadingModal = false;
             }
-        },
-        
+        } 
     }
 }
 </script>

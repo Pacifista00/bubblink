@@ -41,6 +41,11 @@ export default {
         .catch(function (error) {
             console.error('Error:', error);
         });
+  },
+  methods :{
+        detailUser($userId){
+            
+        }
   }
 }
 </script>

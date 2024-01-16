@@ -29,11 +29,11 @@
             <div class="d-flex justify-content-evenly p-2">
                 <Router-link v-if="user.id" class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" :to="{ name: 'Profile', params: { userid: user.id }}"><i class="fa-solid fa-user fs-3"></i></Router-link>
                 |
-                <div @click="showModalAddPost" type="button" class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost"><i class="fa-solid fa-square-plus fs-3"></i></div>
+                <div v-if="user.id" @click="showModalAddPost" type="button" class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost"><i class="fa-solid fa-square-plus fs-3"></i></div>
                 |
-                <Router-link class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" to="/home"><i class="fa-solid fa-house-chimney-user fs-3"></i></Router-link>                
+                <Router-link v-if="user.id" class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" to="/home"><i class="fa-solid fa-house-chimney-user fs-3"></i></Router-link>                
                 |
-                <form @submit.prevent="logout">
+                <form v-if="user.id" @submit.prevent="logout">
                     <button type="submit" class="btn phone-navbar-btn bg-transparent text-red"><i class="fa-solid fa-right-from-bracket fs-3 border-none" pointer></i></button>
                 </form>
             </div>

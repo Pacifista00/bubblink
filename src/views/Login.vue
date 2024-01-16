@@ -97,7 +97,7 @@ export default {
             })
             
             
-            this.$router.push({ path: '/home', query: { alertMessage: `Welcome! Have a nice day ${this.userUsername}..` } });
+            this.$router.push('home');
     
         }catch(err){
             this.showModal('Error','Login failed. Please try again.');

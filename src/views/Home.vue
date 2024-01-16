@@ -57,7 +57,7 @@
                                 <p class="ms-2 fs-6 text-gray">{{ formatTimeAgo(item.created_at) }}</p>
                             </div>
                         
-                        <div class="ms-auto">
+                        <div v-if="user.username == item.author" class="ms-auto">
                             <div class="dropdown">
                                 <button class="btn btn-link text-dark dropdown-toggle" type="button" id="optionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v"></i>
@@ -170,7 +170,7 @@
                                     <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ comment.author }}<i v-if="comment.author_role == 'admin'" class="ms-1 p-0 text-verified fa-solid fa-circle-check"></i></h3>
                                     <p class="ms-2 fs-6 text-body-secondary">{{ formatTimeAgo(comment.created_at) }}</p>
                                 </div>
-                            <div class="ms-auto">
+                            <div v-if="user.username == comment.author" class="ms-auto">
                                 <div class="dropdown">
                                     <button class="btn btn-link text-dark dropdown-toggle" type="button" id="optionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-ellipsis-v"></i>

@@ -44,8 +44,8 @@
 
         <!-- main -->
         <div class="main" style="width:470px;">
-            <form class="search-bar d-flex p-3 mb-3 sticky-top" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form @submit.prevent="search" class="search-bar d-flex p-3 mb-3 sticky-top" role="search" >
+                <input v-model="keySearch" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn my-btn2" type="submit">Search</button>
             </form>
             <div class="">
@@ -54,9 +54,9 @@
                         <div class="">
                             <div class="position-relative rounded-circle">
                                 <img :src="user.picture" class="rounded-circle card-img-top mx-4 my-2" alt="profile" style="width:180px; height:180px; object-fit:cover;">
-                                <div type="button" class="btn-edit-profile position-absolute p-2 rounded-circle" data-bs-toggle="modal" data-bs-target="#modalEditPicture"><i class="fa-solid fa-pen"></i></div>
+                                <div v-if="myUser.id == user.id" type="button" class="btn-edit-profile position-absolute p-2 rounded-circle" data-bs-toggle="modal" data-bs-target="#modalEditPicture"><i class="fa-solid fa-square-pen fs-3"></i></div>
                             </div>
-                            <div type="button" class=" btn my-btn3 mx-auto text-light px-3 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalEditProfile">Edit Profile</div>
+                            <div v-if="myUser.id == user.id" type="button" class=" btn my-btn3 mx-auto text-light px-3 fs-5 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalEditProfile" style="display: none;">Edit Profile</div>
                         </div>
                         <div class="text-start">
                             <p class="mb-0">Username : <span class="text-gray">{{ user.username }}</span></p>
@@ -75,7 +75,7 @@
                 </div>
             </div>
 
-            <h1 class="text-light text-center">My Post</h1>
+            <h1 class="text-light text-center">Post</h1>
 
             <div v-for="item in posts" class="card-sidebar card mb-3 bg-transparent text-light">
                 <div class="card-header my-0 py-0">
@@ -86,7 +86,7 @@
                                 <p class="ms-2 fs-6 text-gray">{{ formatTimeAgo(item.created_at) }}</p>
                             </div>
                         
-                        <div class="ms-auto">
+                        <div v-if="myUser.username == item.author" class="ms-auto">
                             <div class="dropdown" >
                                 <button class="btn btn-link text-dark dropdown-toggle" type="button" id="optionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v"></i>
@@ -232,7 +232,7 @@
                                     <h3 class="ms-2 mb-0 mt-3 fs-6 card-title">{{ comment.author }}<i v-if="comment.author_role == 'admin'" class="text-verified ms-1 p-0 tex-verified fa-solid fa-circle-check"></i></h3>
                                     <p class="ms-2 fs-6 text-body-secondary">{{ formatTimeAgo(comment.created_at) }}</p>
                                 </div>
-                            <div class="ms-auto">
+                            <div v-if="myUser.username == comment.author" class="ms-auto">
                                 <div class="dropdown">
                                     <button class="btn btn-link text-dark dropdown-toggle" type="button" id="optionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-ellipsis-v"></i>
@@ -347,6 +347,7 @@ export default {
             loading:false,
             loadingModal:false,
             submitPreventModalName:'',
+            keySearch:'',
         }
     },
     mounted() {
@@ -700,6 +701,9 @@ export default {
             }finally {
                 this.loadingModal = false;
             }
+        },
+        search(){
+            this.$router.push({ path: '/search', query: { key: this.keySearch } });
         } 
     }
 }

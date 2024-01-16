@@ -142,6 +142,9 @@ body{
 .text-verified{
     color: #0079FF;
 }
+.text-red{
+    color: #FC2947;
+}
 .phone-navbar{
     display: none;
 }

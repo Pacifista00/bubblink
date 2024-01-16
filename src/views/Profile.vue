@@ -27,17 +27,15 @@
 
         <!-- sidebar phone -->
         <div class="phone-navbar">
-            <div class="d-flex justify-content-evenly p-3">
-                <button type="submit" class="btn phone-navbar-btn bg-transparent text-light"><i class="fa-regular fa-user fs-3"></i></button>
-                <span class="strip">|</span>
-                <button type="submit" class="btn phone-navbar-btn bg-transparent text-light"><i class="fa-solid fa-square-plus fs-3"></i></button>
-                <span class="strip">|</span>
+            <div class="d-flex justify-content-evenly p-2">
+                <Router-link v-if="user.id" class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" :to="{ name: 'Profile', params: { userid: user.id }}"><i class="fa-solid fa-user fs-3"></i></Router-link>
+                |
+                <div @click="showModalAddPost" type="button" class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1 border-none" data-bs-toggle="modal" data-bs-target="#modalpost"><i class="fa-solid fa-square-plus fs-3"></i></div>
+                |
+                <Router-link class="text-light text-decoration-none p-1 fs-6 d-block rounded my-1" to="/home"><i class="fa-solid fa-house-chimney-user fs-3"></i></Router-link>                
+                |
                 <form @submit.prevent="logout">
-                    <button type="submit" class="btn phone-navbar-btn bg-transparent text-light"><i class="fa-solid fa-house-chimney-user fs-3"></i></button>
-                </form>
-                <span class="strip">|</span>
-                <form @submit.prevent="logout">
-                    <button type="submit" class="btn phone-navbar-btn bg-transparent text-light"><i class="fa-solid fa-right-from-bracket fs-3 border-none" pointer></i></button>
+                    <button type="submit" class="btn phone-navbar-btn bg-transparent text-red"><i class="fa-solid fa-right-from-bracket fs-3 border-none" pointer></i></button>
                 </form>
             </div>
         </div>
